@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "957369703780",
+    "project_id": "bkamalyoum-67a36",
+    "storage_bucket": "bkamalyoum-67a36.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:957369703780:android:ccc42f6b9f037340636e71",
+        "android_client_info": {
+          "package_name": "com.bkamalyoum.bkamalyoum"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "957369703780-srh1595gec2o979ad0c1e7gi2phqncn8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPJQNAhsyOa-KdVlKQmEXs-fb9rVVG3bE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "957369703780-srh1595gec2o979ad0c1e7gi2phqncn8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
