@@ -92,7 +92,7 @@ class GoldPricesScreen extends StatelessWidget {
             thickness: 1,
           ),
           ListView.builder(
-            // itemExtent: 42.0,
+            itemExtent: 42.0,
             itemCount: categoryModel.metals?.length ?? 0,
             shrinkWrap: true,
             itemBuilder: (context, index) => Container(
@@ -111,7 +111,7 @@ class GoldPricesScreen extends StatelessWidget {
           //   color: Theme.of(mContext).primaryColor,
           //   thickness: 1,
           // ),
-          SizedBox(height: 240.sp),
+          SizedBox(height: 186.sp),
         ],
       ),
     );

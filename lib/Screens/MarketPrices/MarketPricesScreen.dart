@@ -62,6 +62,7 @@ class MarketPricesScreen extends StatelessWidget {
                       itemExtent: 42.0,
                       itemCount: state.response.ebody.current.length,
                       shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) => Container(
                         //padding: EdgeInsets.all(2.0),
                         child: Material(
@@ -111,6 +112,7 @@ class MarketPricesScreen extends StatelessWidget {
                       itemExtent: 42.0,
                       itemCount: state.response.ebody.expectaions.length,
                       shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) => Container(
                         //padding: EdgeInsets.all(2.0),
                         child: Material(
