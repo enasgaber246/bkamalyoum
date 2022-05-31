@@ -1,3 +1,4 @@
+import 'package:bkamalyoum/Component/Components.dart';
 import 'package:bkamalyoum/Component/NewsCard.dart';
 import 'package:bkamalyoum/Component/TextTitle.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,7 +37,7 @@ class NewsScreen extends StatelessWidget {
                 return Center(
                   child: Container(
                     padding: EdgeInsets.all(48.0.sp),
-                    //child: showProgressLoading(),
+                    child: showProgressLoading(),
                   ),
                 );
               } else if (state is LoadedNewsState) {

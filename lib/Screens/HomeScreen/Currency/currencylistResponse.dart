@@ -1,78 +1,155 @@
+/// Ecode : 200
+/// Emsg : "Success"
+/// Ebody : {"current":[{"id":1,"name_en":"USD","name_ar":"الدولار الأمريكي","image":"21328019111653606110.png","selling_price":"130","buying_price":"135"},{"id":2,"name_en":"EUR","name_ar":"اليورو","image":"15080054601653606063.png","selling_price":"120","buying_price":"125"},{"id":5,"name_en":"AED","name_ar":"الدرهم الإماراتي","image":"17058685761653606153.png","selling_price":"667","buying_price":"66"},{"id":6,"name_en":"SAR","name_ar":"الريال السعودي","image":"18551654501653606204.png","selling_price":"32","buying_price":"65"},{"id":7,"name_en":"GBP","name_ar":"الجنية الإسترليني","image":"11906445501653606245.png","selling_price":"32","buying_price":"324"}],"expectaions":[{"id":1,"name_en":"USD","name_ar":"الدولار الأمريكي","image":"21328019111653606110.png","selling_price":"130","buying_price":"135"},{"id":2,"name_en":"EUR","name_ar":"اليورو","image":"15080054601653606063.png","selling_price":"120","buying_price":"125"},{"id":5,"name_en":"AED","name_ar":"الدرهم الإماراتي","image":"17058685761653606153.png","selling_price":"667","buying_price":"66"},{"id":6,"name_en":"SAR","name_ar":"الريال السعودي","image":"18551654501653606204.png","selling_price":"32","buying_price":"65"},{"id":7,"name_en":"GBP","name_ar":"الجنية الإسترليني","image":"11906445501653606245.png","selling_price":"32","buying_price":"324"}]}
 
-class currencylistResponse {
-  currencylistResponse({
-      int ecode, 
-      String emsg, 
-      List<Ebody> ebody,}){
-    _ecode = ecode;
-    _emsg = emsg;
-    _ebody = ebody;
-}
+class CurrencylistResponse {
+  CurrencylistResponse({
+      this.ecode, 
+      this.emsg, 
+      this.ebody,});
 
-  currencylistResponse.fromJson(dynamic json) {
-    _ecode = json['Ecode'];
-    _emsg = json['Emsg'];
-    if (json['Ebody'] != null) {
-      _ebody = [];
-      json['Ebody'].forEach((v) {
-        _ebody.add(Ebody.fromJson(v));
-      });
-    }
+  CurrencylistResponse.fromJson(dynamic json) {
+    ecode = json['Ecode'];
+    emsg = json['Emsg'];
+    ebody = json['Ebody'] != null ? Ebody.fromJson(json['Ebody']) : null;
   }
-  int _ecode;
-  String _emsg;
-  List<Ebody> _ebody;
-
-  int get ecode => _ecode;
-  String get emsg => _emsg;
-  List<Ebody> get ebody => _ebody;
+  int ecode;
+  String emsg;
+  Ebody ebody;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['Ecode'] = _ecode;
-    map['Emsg'] = _emsg;
-    if (_ebody != null) {
-      map['Ebody'] = _ebody.map((v) => v.toJson()).toList();
+    map['Ecode'] = ecode;
+    map['Emsg'] = emsg;
+    if (ebody != null) {
+      map['Ebody'] = ebody.toJson();
     }
     return map;
   }
 
 }
 
+/// current : [{"id":1,"name_en":"USD","name_ar":"الدولار الأمريكي","image":"21328019111653606110.png","selling_price":"130","buying_price":"135"},{"id":2,"name_en":"EUR","name_ar":"اليورو","image":"15080054601653606063.png","selling_price":"120","buying_price":"125"},{"id":5,"name_en":"AED","name_ar":"الدرهم الإماراتي","image":"17058685761653606153.png","selling_price":"667","buying_price":"66"},{"id":6,"name_en":"SAR","name_ar":"الريال السعودي","image":"18551654501653606204.png","selling_price":"32","buying_price":"65"},{"id":7,"name_en":"GBP","name_ar":"الجنية الإسترليني","image":"11906445501653606245.png","selling_price":"32","buying_price":"324"}]
+/// expectaions : [{"id":1,"name_en":"USD","name_ar":"الدولار الأمريكي","image":"21328019111653606110.png","selling_price":"130","buying_price":"135"},{"id":2,"name_en":"EUR","name_ar":"اليورو","image":"15080054601653606063.png","selling_price":"120","buying_price":"125"},{"id":5,"name_en":"AED","name_ar":"الدرهم الإماراتي","image":"17058685761653606153.png","selling_price":"667","buying_price":"66"},{"id":6,"name_en":"SAR","name_ar":"الريال السعودي","image":"18551654501653606204.png","selling_price":"32","buying_price":"65"},{"id":7,"name_en":"GBP","name_ar":"الجنية الإسترليني","image":"11906445501653606245.png","selling_price":"32","buying_price":"324"}]
+
 class Ebody {
   Ebody({
-      int id, 
-      String nameEn, 
-      String nameAr, 
-      String image,}){
-    _id = id;
-    _nameEn = nameEn;
-    _nameAr = nameAr;
-    _image = image;
-}
+      this.current, 
+      this.expectaions,});
 
   Ebody.fromJson(dynamic json) {
-    _id = json['id'];
-    _nameEn = json['name_en'];
-    _nameAr = json['name_ar'];
-    _image = json['image'];
+    if (json['current'] != null) {
+      current = [];
+      json['current'].forEach((v) {
+        current.add(Current.fromJson(v));
+      });
+    }
+    if (json['expectaions'] != null) {
+      expectaions = [];
+      json['expectaions'].forEach((v) {
+        expectaions.add(Expectaions.fromJson(v));
+      });
+    }
   }
-  int _id;
-  String _nameEn;
-  String _nameAr;
-  String _image;
-
-  int get id => _id;
-  String get nameEn => _nameEn;
-  String get nameAr => _nameAr;
-  String get image => _image;
+  List<Current> current;
+  List<Expectaions> expectaions;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['id'] = _id;
-    map['name_en'] = _nameEn;
-    map['name_ar'] = _nameAr;
-    map['image'] = _image;
+    if (current != null) {
+      map['current'] = current.map((v) => v.toJson()).toList();
+    }
+    if (expectaions != null) {
+      map['expectaions'] = expectaions.map((v) => v.toJson()).toList();
+    }
+    return map;
+  }
+
+}
+
+/// id : 1
+/// name_en : "USD"
+/// name_ar : "الدولار الأمريكي"
+/// image : "21328019111653606110.png"
+/// selling_price : "130"
+/// buying_price : "135"
+
+class Expectaions {
+  Expectaions({
+      this.id, 
+      this.nameEn, 
+      this.nameAr, 
+      this.image, 
+      this.sellingPrice, 
+      this.buyingPrice,});
+
+  Expectaions.fromJson(dynamic json) {
+    id = json['id'];
+    nameEn = json['name_en'];
+    nameAr = json['name_ar'];
+    image = json['image'];
+    sellingPrice = json['selling_price'];
+    buyingPrice = json['buying_price'];
+  }
+  int id;
+  String nameEn;
+  String nameAr;
+  String image;
+  String sellingPrice;
+  String buyingPrice;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['id'] = id;
+    map['name_en'] = nameEn;
+    map['name_ar'] = nameAr;
+    map['image'] = image;
+    map['selling_price'] = sellingPrice;
+    map['buying_price'] = buyingPrice;
+    return map;
+  }
+
+}
+
+/// id : 1
+/// name_en : "USD"
+/// name_ar : "الدولار الأمريكي"
+/// image : "21328019111653606110.png"
+/// selling_price : "130"
+/// buying_price : "135"
+
+class Current {
+  Current({
+      this.id, 
+      this.nameEn, 
+      this.nameAr, 
+      this.image, 
+      this.sellingPrice, 
+      this.buyingPrice,});
+
+  Current.fromJson(dynamic json) {
+    id = json['id'];
+    nameEn = json['name_en'];
+    nameAr = json['name_ar'];
+    image = json['image'];
+    sellingPrice = json['selling_price'];
+    buyingPrice = json['buying_price'];
+  }
+  int id;
+  String nameEn;
+  String nameAr;
+  String image;
+  String sellingPrice;
+  String buyingPrice;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['id'] = id;
+    map['name_en'] = nameEn;
+    map['name_ar'] = nameAr;
+    map['image'] = image;
+    map['selling_price'] = sellingPrice;
+    map['buying_price'] = buyingPrice;
     return map;
   }
 

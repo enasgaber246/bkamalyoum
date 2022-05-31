@@ -1,4 +1,5 @@
 import 'package:bkamalyoum/Component/Btn.dart';
+import 'package:bkamalyoum/Component/Components.dart';
 import 'package:bkamalyoum/Component/DropDown.dart';
 import 'package:bkamalyoum/Component/InputDataWidget.dart';
 import 'package:bkamalyoum/Component/TextTitle.dart';
@@ -41,12 +42,12 @@ class ExpectPricesScreenState extends State<ExpectPricesScreen> {
               return Center(
                 child: Container(
                   padding: EdgeInsets.all(48.0.sp),
-                  //child: showProgressLoading(),
+                  child: showProgressLoading(),
                 ),
               );
             } else if (state is LoadedCurrencyState) {
-              for(int i=0;i<state.response.ebody.length;i++){
-                dropdownItem.add(state.response.ebody[i].nameAr);
+              for(int i=0;i<state.response.ebody.current.length;i++){
+                dropdownItem.add(state.response.ebody.current[i].nameAr);
               }
               return DropDown(dropdownItem);
             } else if (state is FailedCurrencyState) {

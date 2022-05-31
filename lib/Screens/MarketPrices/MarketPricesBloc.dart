@@ -1,10 +1,7 @@
-
-
 import 'dart:convert';
 import 'package:bkamalyoum/Screens/HomeScreen/Currency/currencylistResponse.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 
 class MarketPricesBloc extends Bloc<MarketPricesEvent, MarketPricesState> {
   MarketPricesBloc() : super(LoadingMarketPricesState());
@@ -25,7 +22,7 @@ class MarketPricesBloc extends Bloc<MarketPricesEvent, MarketPricesState> {
         final data = jsonDecode(res.body) as Map<String, dynamic>;
 
         print('LoadMarketPricesEvent Response :  ${data.toString()}');
-        currencylistResponse response = currencylistResponse.fromJson(data);
+        CurrencylistResponse response = CurrencylistResponse.fromJson(data);
 
         if (response.ecode == 200) {
           yield LoadedMarketPricesState(response: response);
@@ -53,7 +50,7 @@ abstract class MarketPricesState {}
 class LoadingMarketPricesState extends MarketPricesState {}
 
 class LoadedMarketPricesState extends MarketPricesState {
-  currencylistResponse response;
+  CurrencylistResponse response;
 
   LoadedMarketPricesState({this.response});
 }

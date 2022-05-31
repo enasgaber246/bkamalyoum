@@ -1,4 +1,5 @@
 import 'package:bkamalyoum/Component/ChoiseCoinCard.dart';
+import 'package:bkamalyoum/Component/Components.dart';
 import 'package:bkamalyoum/Component/TextTitle.dart';
 import 'package:bkamalyoum/Screens/BankPrices/BankPricesBloc.dart';
 import 'package:bkamalyoum/Screens/Menu/MenuScreen.dart';
@@ -46,8 +47,9 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     selectedItemColor = Colors.white;
     unselectedItemColor = Colors.white;
-    selectedBgColor = Colors.transparent;
+    selectedBgColor = Theme.of(context).primaryColor;
     unselectedBgColor = Theme.of(context).primaryColor;
+
     return Scaffold(
       key: key,
       appBar: AppBar(
@@ -56,11 +58,14 @@ class HomePageState extends State<HomePage> {
           'بكام اليوم؟',
           style: TextStyle(fontFamily: 'Lalezar'),
         ),
+        automaticallyImplyLeading: false,
         actions: [
           Container(
               padding: EdgeInsets.only(right: 20.0, left: 20.0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+
+                },
                 child: SvgPicture.asset(
                   'assets/images/refersh.svg',
                   width: 82.sp,
@@ -129,14 +134,14 @@ class HomePageState extends State<HomePage> {
                             return Center(
                               child: Container(
                                 padding: EdgeInsets.all(48.0.sp),
-                                //child: showProgressLoading(),
+                                child: showProgressLoading(),
                               ),
                             );
                           } else if (state is LoadedCurrencyState) {
                             return ListView.builder(
                               shrinkWrap: true,
                               itemExtent: 42.0,
-                              itemCount: state.response.ebody.length,
+                              itemCount: state.response.ebody?.current?.length??0,
                               itemBuilder: (context, index) => Container(
                                 //padding: EdgeInsets.all(2.0),
                                 child: Material(
@@ -146,12 +151,12 @@ class HomePageState extends State<HomePage> {
                                       ? Theme.of(context).primaryColorLight
                                       : Colors.white,
                                   child: ChoiseCoinCard(
-                                    state.response.ebody[index].image?? '',
-                                    state.response.ebody[index].nameAr,
-                                    state.response.ebody[index].nameEn,
+                                    state.response.ebody?.current[index].image?? '',
+                                    state.response.ebody?.current[index].nameAr,
+                                    state.response.ebody?.current[index].nameEn,
                                     onPressed: () {
                                       SelectedCurrency(
-                                          state.response.ebody[index].id);
+                                          state.response.ebody?.current[index].id);
                                     },
                                   ),
                                 ),
@@ -178,7 +183,7 @@ class HomePageState extends State<HomePage> {
                 }
               }),
           SizedBox(
-            width: 12.0,
+            width: 12.0
           )
         ],
       ),
@@ -240,7 +245,7 @@ class HomePageState extends State<HomePage> {
   Color _getItemColor(int index) =>
       _selectedIndex == index ? selectedItemColor : unselectedItemColor;
 
-  Widget _buildIcon(String icon, String text, int index) => Container(
+  Widget _buildIcon(String icon, String text, int index, {bool isSelected = false}) => Container(
         width: double.infinity,
         height: kBottomNavigationBarHeight,
         child: Material(

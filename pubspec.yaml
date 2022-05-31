@@ -40,7 +40,10 @@ dependencies:
   firebase_core: ^0.7.0
   overlay_support: ^1.0.5
   flutter_local_notifications: ^4.0.1+2
-
+  flutter_phone_direct_caller: ^1.0.1
+  rate_my_app: ^0.7.2
+  flutter_share: ^1.0.5
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

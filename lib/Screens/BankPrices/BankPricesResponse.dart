@@ -3,7 +3,7 @@ class BankPricesResponse {
   BankPricesResponse({
       int ecode, 
       String emsg, 
-      List<Ebody> ebody,}){
+      List<BankPriceModel> ebody,}){
     _ecode = ecode;
     _emsg = emsg;
     _ebody = ebody;
@@ -15,17 +15,17 @@ class BankPricesResponse {
     if (json['Ebody'] != null) {
       _ebody = [];
       json['Ebody'].forEach((v) {
-        _ebody.add(Ebody.fromJson(v));
+        _ebody.add(BankPriceModel.fromJson(v));
       });
     }
   }
   int _ecode;
   String _emsg;
-  List<Ebody> _ebody;
+  List<BankPriceModel> _ebody;
 
   int get ecode => _ecode;
   String get emsg => _emsg;
-  List<Ebody> get ebody => _ebody;
+  List<BankPriceModel> get ebody => _ebody;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -38,8 +38,8 @@ class BankPricesResponse {
   }
 
 }
-class Ebody {
-  Ebody({
+class BankPriceModel {
+  BankPriceModel({
       String id, 
       String image, 
       String nameEn, 
@@ -60,7 +60,7 @@ class Ebody {
     _currencyName = currencyName;
 }
 
-  Ebody.fromJson(dynamic json) {
+  BankPriceModel.fromJson(dynamic json) {
     _id = json['id'];
     _image = json['image'];
     _nameEn = json['name_en'];

@@ -1,127 +1,119 @@
+import 'package:bkamalyoum/Component/Components.dart';
 import 'package:bkamalyoum/Component/GoldCard.dart';
 import 'package:bkamalyoum/Component/TextTitle.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
+
+import 'GoldPricesBloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'metal_prices_response.dart';
 
 class GoldPricesScreen extends StatelessWidget {
+  final GoldPricesBloc bloc = GoldPricesBloc();
+
+  String getDateFormatted() {
+    var now = new DateTime.now();
+    var formatter = new DateFormat('dd MMM  hh:mm a', 'ar');
+    String formattedDate = formatter.format(now);
+    return formattedDate;
+  }
+
   @override
   Widget build(BuildContext mContext) {
     // TODO: implement build
+    initializeDateFormatting('ar');
 
-    return Column(
-      children: [
-        TextTitle(
-          'تحديث 5 أبريل 11:47 ص',
-          Theme.of(mContext).textTheme.subtitle1,
-        ),
-        Divider(
-          color: Theme.of(mContext).primaryColor,
-          thickness: 1,
-        ),
-        Container(
-            margin: EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextTitle(
-                      'جنيه سوداني', Theme.of(mContext).textTheme.headline2),
-                  TextTitle(
-                      'اسعار الذهب', Theme.of(mContext).textTheme.headline2),
-                ])),
-        Divider(
-          color: Theme.of(mContext).primaryColor,
-          thickness: 1,
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemExtent: 42.0,
-            itemCount: 1,
-            itemBuilder: (context, index) => Container(
-              //padding: EdgeInsets.all(2.0),
-              child: Material(
-                elevation: 2.0,
-                //borderRadius: BorderRadius.circular(5.0),F2F8F8
-                color: index % 2 == 0
-                    ? Theme.of(context).primaryColorLight
-                    : Colors.white,
-                child: GoldCard('576.00', 'الذهب عيار 21'),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          child: Column(
+            children: [
+              TextTitle(
+                '  تحديث ${getDateFormatted()}',
+                Theme.of(mContext).textTheme.subtitle1,
               ),
-            ),
+              // List
+              BlocProvider<GoldPricesBloc>(
+                create: (context) => bloc..add(LoadMetalPricesEvent()),
+                child: BlocBuilder<GoldPricesBloc, MetalPricesState>(
+                    builder: (context, state) {
+                  if (state is LoadingMetalPricesState) {
+                    return Center(
+                      child: Container(
+                        padding: EdgeInsets.all(48.0.sp),
+                        child: showProgressLoading(),
+                      ),
+                    );
+                  } else if (state is LoadedMetalPricesState) {
+                    return ListView.builder(
+                      // itemExtent: 42.0,
+                      itemCount: state.response?.ebody?.length ?? 0,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) =>
+                          metalCard(mContext, state.response?.ebody[index]),
+                    );
+                  } else if (state is FailedMetalPricesState) {
+                    return TextTitle('', Theme.of(context).textTheme.subtitle1);
+                  } else {
+                    return TextTitle('', Theme.of(context).textTheme.subtitle1);
+                  }
+                }),
+              ),
+            ],
           ),
         ),
-        Divider(
-          color: Theme.of(mContext).primaryColor,
-          thickness: 1,
-        ),
-
-        Container(
-            margin: EdgeInsets.symmetric(horizontal: 20.0),
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextTitle(
-                      'جنيه سوداني', Theme.of(mContext).textTheme.headline2),
-                  TextTitle(
-                      'اسعار الفضه', Theme.of(mContext).textTheme.headline2),
-                ])),
-        Divider(
-          color: Theme.of(mContext).primaryColor,
-          thickness: 1,
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemExtent: 42.0,
-            itemCount: 1,
-            itemBuilder: (context, index) => Container(
-              //padding: EdgeInsets.all(2.0),
-              child: Material(
-                elevation: 2.0,
-                //borderRadius: BorderRadius.circular(5.0),F2F8F8
-                color: index % 2 == 0
-                    ? Theme.of(context).primaryColorLight
-                    : Colors.white,
-                child: GoldCard('567.00', 'فضه عيار92.5 (الاسترليني)'),
-              ),
-            ),
-          ),
-        )
-      ],
+      ),
     );
-    // return Center(
-    //   child:Column(
-    //     children: [
-    //       Text('أسعار الذهب والفضه'),
-    //       Text(translator.translate('Welcome')),
-    //       InkWell(
-    //         onTap: () async {
-    //
-    //           if (translator.currentLanguage == "ar") {
-    //             print("en to ar");
-    //             await FlutterSession().set("langu", "en");
-    //             translator.setNewLanguage(
-    //               mContext,
-    //               newLanguage: 'en',
-    //               restart: true,
-    //               remember: true,
-    //             );
-    //           } else {
-    //             await FlutterSession().set("langu", "ar");
-    //             translator.setNewLanguage(
-    //               mContext,
-    //               newLanguage: 'ar',
-    //               restart: true,
-    //               remember: true,
-    //             );
-    //           }
-    //         },
-    //         child: Padding(
-    //           padding: const EdgeInsets.all(24.0),
-    //           child: Text('Change Language',style: TextStyle(
-    //             color: Colors.black
-    //           ),),
-    //         ),
-    //       ),
-    //     ],
-    //   ) ,
-    // );
+  }
+
+  Widget metalCard(BuildContext mContext, MetalCategoryModel categoryModel) {
+    return Container(
+      child: Column(
+        children: [
+          Divider(
+            color: Theme.of(mContext).primaryColor,
+            thickness: 1,
+          ),
+          Container(
+              margin: EdgeInsets.symmetric(horizontal: 20.0),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    TextTitle(
+                        'جنيه سوداني', Theme.of(mContext).textTheme.headline2),
+                    TextTitle('اسعار ${categoryModel.nameAr ?? ''}',
+                        Theme.of(mContext).textTheme.headline2),
+                  ])),
+          Divider(
+            color: Theme.of(mContext).primaryColor,
+            thickness: 1,
+          ),
+          ListView.builder(
+            // itemExtent: 42.0,
+            itemCount: categoryModel.metals?.length ?? 0,
+            shrinkWrap: true,
+            itemBuilder: (context, index) => Container(
+              //padding: EdgeInsets.all(2.0),
+              child: Material(
+                // elevation: 2.0,
+                //borderRadius: BorderRadius.circular(5.0), F2F8F8
+                color: index % 2 == 0
+                    ? Theme.of(context).primaryColorLight
+                    : Colors.white,
+                child: GoldCard(categoryModel.metals[index]),
+              ),
+            ),
+          ),
+          // Divider(
+          //   color: Theme.of(mContext).primaryColor,
+          //   thickness: 1,
+          // ),
+          SizedBox(height: 240.sp),
+        ],
+      ),
+    );
   }
 }

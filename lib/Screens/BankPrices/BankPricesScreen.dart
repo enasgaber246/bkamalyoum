@@ -1,4 +1,6 @@
 import 'package:bkamalyoum/Component/CardContent.dart';
+import 'package:bkamalyoum/Component/CardContentTitle.dart';
+import 'package:bkamalyoum/Component/Components.dart';
 import 'package:bkamalyoum/Component/TextTitle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +25,7 @@ class BankPricesScreen extends StatelessWidget {
           return Center(
             child: Container(
               padding: EdgeInsets.all(48.0.sp),
-              // child: showProgressLoading(),
+              child: showProgressLoading(),
             ),
           );
         } else if (state is LoadedBankPricesState) {
@@ -36,7 +38,7 @@ class BankPricesScreen extends StatelessWidget {
               Divider(
                 color: Colors.black26,
               ),
-              CardContent('assets/images/dolar.svg', ' USA دولار أمريكي',
+              CardContentTitle('assets/images/dolar.svg', ' USA دولار أمريكي',
                   'شراء', 'بيع', Theme.of(context).textTheme.subtitle1),
               Divider(
                 color: Theme.of(context).primaryColor,
@@ -54,13 +56,14 @@ class BankPricesScreen extends StatelessWidget {
                       color: index % 2 == 0
                           ? Theme.of(context).primaryColorLight
                           : Colors.white,
-                      child: CardContent(
-                        '',
-                        state.response.ebody[index].nameAr,
-                        state.response.ebody[index].buyingPrice,
-                        state.response.ebody[index].sellingPrice,
+                      child: BankPricesCard(
+                      state.response.ebody[index],
+                        // '',
+                        // state.response.ebody[index].nameAr,
+                        // state.response.ebody[index].buyingPrice,
+                        // state.response.ebody[index].sellingPrice,
                         Theme.of(context).textTheme.subtitle1,
-                        networkUrl: state.response.ebody[index].image,
+                        // networkUrl: state.response.ebody[index].image,
                       ),
                     ),
                   ),

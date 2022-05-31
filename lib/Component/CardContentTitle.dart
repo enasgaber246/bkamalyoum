@@ -1,4 +1,3 @@
-import 'package:bkamalyoum/Screens/BankPrices/BankPricesResponse.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,22 +5,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'TextTitle.dart';
 
-class BankPricesCard extends StatelessWidget {
-  // String IconPath;
-  // String text1, text2, text3;
+class CardContentTitle extends StatelessWidget {
+  String IconPath;
+  String text1, text2, text3;
   TextStyle textStyle;
-  // String networkUrl;
-  BankPriceModel model;
+  String networkUrl;
 
-  BankPricesCard(
-      this.model,
-    // this.IconPath,
-    // this.text1,
-    // this.text2,
-    // this.text3,
-    this.textStyle,
-    // this.networkUrl,
-  );
+  CardContentTitle(
+      this.IconPath,
+      this.text1,
+      this.text2,
+      this.text3,
+      this.textStyle, {
+        this.networkUrl,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +33,16 @@ class BankPricesCard extends StatelessWidget {
               SizedBox(
                 width: 80.sp,
               ),
-              TextTitle(model.buyingPrice ?? '-', textStyle),
+              TextTitle(text2 ?? '-', textStyle),
               SizedBox(
                 width: 140.sp,
               ),
-              TextTitle(model.sellingPrice?? '-', textStyle)
+              TextTitle(text3 ?? '-', textStyle)
             ],
           ),
           Row(
             children: [
-              TextTitle(model.nameAr?? '-', textStyle),
+              TextTitle(text1 ?? '-', textStyle),
               SizedBox(
                 width: 50.sp,
               ),
@@ -56,7 +53,7 @@ class BankPricesCard extends StatelessWidget {
               //     IconPath,
               //   ),
               // ),
-              (model.image == null)
+              (networkUrl == null)
                   ? SizedBox(
                 width: 100.sp,
                 height: 100.sp,
@@ -67,7 +64,7 @@ class BankPricesCard extends StatelessWidget {
                 height: 100.sp,
                 padding: EdgeInsets.all(5.0.sp),
                 child: Image.network(
-                  'https://bkamalyoum.com/uploads/small/${model.image}',
+                  'https://bkamalyoum.com/uploads/small/${networkUrl}',
                   fit: BoxFit.fill,
                   loadingBuilder: (BuildContext context, Widget child,
                       ImageChunkEvent loadingProgress) {
@@ -76,7 +73,7 @@ class BankPricesCard extends StatelessWidget {
                       child: CircularProgressIndicator(
                         value: loadingProgress.expectedTotalBytes != null
                             ? loadingProgress.cumulativeBytesLoaded /
-                                loadingProgress.expectedTotalBytes
+                            loadingProgress.expectedTotalBytes
                             : null,
                       ),
                     );

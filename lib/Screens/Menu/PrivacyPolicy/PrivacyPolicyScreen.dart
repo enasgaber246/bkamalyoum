@@ -1,3 +1,4 @@
+import 'package:bkamalyoum/Component/Components.dart';
 import 'package:bkamalyoum/Component/TextTitle.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
                 return Center(
                   child: Container(
                     padding: EdgeInsets.all(48.0.sp),
-                    //child: showProgressLoading(),
+                    child: showProgressLoading(),
                   ),
                 );
               } else if (state is LoadedPrivacyPolicyState) {

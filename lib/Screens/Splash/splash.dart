@@ -38,12 +38,12 @@ class _splashState extends State<Splash> {
 
     super.initState();
 
-    // Future.delayed(Duration(seconds: 3), () {
-    //   Navigator.pushReplacement(
-    //     context,
-    //     MaterialPageRoute(builder: (context) => HomePage()),
-    //   );
-    // });
+    Future.delayed(Duration(seconds: 3), () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    });
   }
 
   @override

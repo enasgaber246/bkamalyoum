@@ -22,7 +22,7 @@ class CurrencyBloc extends Bloc<CurrencyEvent, CurrencyState> {
         final data = jsonDecode(res.body) as Map<String, dynamic>;
 
         print('LoadCurrencyEvent Response :  ${data.toString()}');
-        currencylistResponse response = currencylistResponse.fromJson(data);
+        CurrencylistResponse response = CurrencylistResponse.fromJson(data);
 
         if (response.ecode == 200) {
           yield LoadedCurrencyState(response: response);
@@ -50,7 +50,7 @@ abstract class CurrencyState {}
 class LoadingCurrencyState extends CurrencyState {}
 
 class LoadedCurrencyState extends CurrencyState {
-  currencylistResponse response;
+  CurrencylistResponse response;
 
   LoadedCurrencyState({this.response});
 }

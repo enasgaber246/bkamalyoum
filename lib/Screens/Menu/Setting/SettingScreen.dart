@@ -1,3 +1,4 @@
+import 'package:bkamalyoum/Component/Components.dart';
 import 'package:bkamalyoum/Component/TextTitle.dart';
 import 'package:bkamalyoum/Component/switchWithText.dart';
 import 'package:bkamalyoum/Screens/HomeScreen/Currency/CurrencyBloc.dart';
@@ -65,19 +66,19 @@ class _settingScreenState extends State<SettingScreen> {
                   return Center(
                     child: Container(
                       padding: EdgeInsets.all(48.0.sp),
-                      //child: showProgressLoading(),
+                      child: showProgressLoading(),
                     ),
                   );
                 } else if (state is LoadedCurrencyState) {
                   return ListView.builder(
                     shrinkWrap: true,
                     itemExtent: 42.0,
-                    itemCount: state.response.ebody.length,
+                    itemCount: state.response.ebody.current.length,
                     itemBuilder: (context, index) => Container(
                       //padding: EdgeInsets.all(2.0),
 
                       child: switchWithText(
-                          state.response.ebody[index].nameAr, true, (val) {}),
+                          state.response.ebody.current[index].nameAr, true, (val) {}),
                     ),
                   );
                 } else if (state is FailedCurrencyState) {
