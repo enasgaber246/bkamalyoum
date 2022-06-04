@@ -29,7 +29,6 @@ class _signinScreenState extends State<SigninScreen> {
 
   @override
   Widget build(BuildContext mContext) {
-    // TODO: implement build
     return Form(
       key: _formKey,
       child: Column(
@@ -49,8 +48,8 @@ class _signinScreenState extends State<SigninScreen> {
           AuthInputData(
             "كلمه المرور",
             TextInputType.visiblePassword,
-            isPass: !_passwordVisible,
             ctrl: passwordCtrl,
+            isPass: !_passwordVisible,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'رجاء إدخال كلمة المرور';

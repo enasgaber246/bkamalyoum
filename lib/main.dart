@@ -1,8 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_session/flutter_session.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Screens/Splash/splash.dart';
 
@@ -22,7 +25,25 @@ Future<void> main() async {
     assetsDirectory: 'assets/langs/',
   );
 
+  await saveFirebaseToken();
+
   return runApp(MyApp());
+}
+
+Future<void> saveFirebaseToken() async {
+  // 1. Initialize the Firebase app
+  await Firebase.initializeApp();
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  // 2. Instantiate Firebase Messaging
+  FirebaseMessaging _messaging = FirebaseMessaging.instance;
+  String token = await _messaging.getToken();
+  prefs.setString('FCM_DEVICE_TOKEN', token);
+
+  _messaging.onTokenRefresh.listen((newToken) async {
+    prefs.setString('FCM_DEVICE_TOKEN', token);
+  });
 }
 
 class MyApp extends StatelessWidget {

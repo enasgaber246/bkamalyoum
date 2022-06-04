@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'PushNotification.dart';
 
@@ -97,9 +98,16 @@ class _splashState extends State<Splash> {
     // 1. Initialize the Firebase app
     await Firebase.initializeApp();
 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
     // 2. Instantiate Firebase Messaging
     _messaging = FirebaseMessaging.instance;
     String token = await _messaging.getToken();
+    prefs.setString('FCM_DEVICE_TOKEN', token);
+
+    _messaging.onTokenRefresh.listen((newToken) async {
+      prefs.setString('FCM_DEVICE_TOKEN', token);
+    });
 
     print('FirebaseMessaging : Token ${token}');
 
