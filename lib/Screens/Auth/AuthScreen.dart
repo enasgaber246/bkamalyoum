@@ -8,7 +8,6 @@ import 'SignUpScreen.dart';
 class AuthScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _authScreenState();
   }
 }
@@ -41,9 +40,11 @@ class _authScreenState extends State<AuthScreen> {
                   child: TabBar(
                     tabs: [
                       Tab(
+                        text: "تسجيل الدخول",
+                      ),
+                      Tab(
                         text: "حساب جديد",
                       ),
-                      Tab(text: "تسجيل الدخول"),
                     ],
                     labelStyle: Theme.of(context).textTheme.subtitle1,
                     labelColor: Theme.of(context).primaryColor,

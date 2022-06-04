@@ -29,53 +29,58 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OverlaySupport(
-      child: LocalizedApp(
-        child: ScreenUtilInit(
-          designSize: Size(1329, 2960),
-          allowFontScaling: false,
-          builder: () => MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                primaryColor: Color(0xFF4D8D8F),
-                accentColor: Color(0x867bc2c4),
-                primaryColorLight: Color(0xFFF2F8F8),
-                dividerColor: Color(0xFF707070),
-                fontFamily: 'Dubai',
-                textTheme: const TextTheme(
-                  headline1: TextStyle(
-                      fontSize: 36.0,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF4D8D8F)),
-                  headline2: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xFF4D8D8F)),
-                  headline3: TextStyle(
-                      fontSize: 10.0,
-                      fontWeight: FontWeight.normal,
-                      color: Color(0xFF4D8D8F)),
-                  subtitle1: TextStyle(
-                      fontSize: 16.0,
-                      fontStyle: FontStyle.normal,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w300),
-                  subtitle2: TextStyle(
-                      fontSize: 16.0,
-                      fontStyle: FontStyle.normal,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500),
-                  bodyText1: TextStyle(
-                    fontSize: 12.0,
-                    fontFamily: 'Dubai',
-                  ),
-                  bodyText2: TextStyle(
-                    fontSize: 12.0,
-                    fontFamily: 'Dubai',
-                    color: Colors.white,
+      child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+          },
+          child: LocalizedApp(
+          child: ScreenUtilInit(
+            designSize: Size(1329, 2960),
+            allowFontScaling: false,
+            builder: () => MaterialApp(
+                debugShowCheckedModeBanner: false,
+                theme: ThemeData(
+                  primaryColor: Color(0xFF4D8D8F),
+                  accentColor: Color(0x867bc2c4),
+                  primaryColorLight: Color(0xFFF2F8F8),
+                  dividerColor: Color(0xFF707070),
+                  fontFamily: 'Dubai',
+                  textTheme: const TextTheme(
+                    headline1: TextStyle(
+                        fontSize: 36.0,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF4D8D8F)),
+                    headline2: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.normal,
+                        color: Color(0xFF4D8D8F)),
+                    headline3: TextStyle(
+                        fontSize: 10.0,
+                        fontWeight: FontWeight.normal,
+                        color: Color(0xFF4D8D8F)),
+                    subtitle1: TextStyle(
+                        fontSize: 16.0,
+                        fontStyle: FontStyle.normal,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w300),
+                    subtitle2: TextStyle(
+                        fontSize: 16.0,
+                        fontStyle: FontStyle.normal,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500),
+                    bodyText1: TextStyle(
+                      fontSize: 12.0,
+                      fontFamily: 'Dubai',
+                    ),
+                    bodyText2: TextStyle(
+                      fontSize: 12.0,
+                      fontFamily: 'Dubai',
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-              ),
-              home: Splash()),
+                home: Splash()),
+          ),
         ),
       ),
     );

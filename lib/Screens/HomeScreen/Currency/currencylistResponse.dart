@@ -47,12 +47,12 @@ class Ebody {
     if (json['expectaions'] != null) {
       expectaions = [];
       json['expectaions'].forEach((v) {
-        expectaions.add(Expectaions.fromJson(v));
+        expectaions.add(Current.fromJson(v));
       });
     }
   }
   List<Current> current;
-  List<Expectaions> expectaions;
+  List<Current> expectaions;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -74,42 +74,42 @@ class Ebody {
 /// selling_price : "130"
 /// buying_price : "135"
 
-class Expectaions {
-  Expectaions({
-      this.id, 
-      this.nameEn, 
-      this.nameAr, 
-      this.image, 
-      this.sellingPrice, 
-      this.buyingPrice,});
-
-  Expectaions.fromJson(dynamic json) {
-    id = json['id'];
-    nameEn = json['name_en'];
-    nameAr = json['name_ar'];
-    image = json['image'];
-    sellingPrice = json['selling_price'];
-    buyingPrice = json['buying_price'];
-  }
-  int id;
-  String nameEn;
-  String nameAr;
-  String image;
-  String sellingPrice;
-  String buyingPrice;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['id'] = id;
-    map['name_en'] = nameEn;
-    map['name_ar'] = nameAr;
-    map['image'] = image;
-    map['selling_price'] = sellingPrice;
-    map['buying_price'] = buyingPrice;
-    return map;
-  }
-
-}
+// class Expectaions {
+//   Expectaions({
+//       this.id,
+//       this.nameEn,
+//       this.nameAr,
+//       this.image,
+//       this.sellingPrice,
+//       this.buyingPrice,});
+//
+//   Expectaions.fromJson(dynamic json) {
+//     id = json['id'];
+//     nameEn = json['name_en'];
+//     nameAr = json['name_ar'];
+//     image = json['image'];
+//     sellingPrice = json['selling_price'];
+//     buyingPrice = json['buying_price'];
+//   }
+//   int id;
+//   String nameEn;
+//   String nameAr;
+//   String image;
+//   String sellingPrice;
+//   String buyingPrice;
+//
+//   Map<String, dynamic> toJson() {
+//     final map = <String, dynamic>{};
+//     map['id'] = id;
+//     map['name_en'] = nameEn;
+//     map['name_ar'] = nameAr;
+//     map['image'] = image;
+//     map['selling_price'] = sellingPrice;
+//     map['buying_price'] = buyingPrice;
+//     return map;
+//   }
+//
+// }
 
 /// id : 1
 /// name_en : "USD"
@@ -137,10 +137,11 @@ class Current {
   }
   int id;
   String nameEn;
-  String nameAr;
+  String  nameAr;
   String image;
   String sellingPrice;
   String buyingPrice;
+  bool isSubscribed;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

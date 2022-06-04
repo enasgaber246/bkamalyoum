@@ -1,12 +1,19 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:bkamalyoum/Component/AppBarCustom.dart';
 import 'package:bkamalyoum/Component/ChoiseCoinCard.dart';
 import 'package:bkamalyoum/Component/Components.dart';
 import 'package:bkamalyoum/Component/TextTitle.dart';
 import 'package:bkamalyoum/Screens/BankPrices/BankPricesBloc.dart';
 import 'package:bkamalyoum/Screens/Menu/MenuScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../BankPrices/BankPricesScreen.dart';
 import '../ExpectPrices/ExpectPricesScreen.dart';
@@ -24,10 +31,15 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  final currency_bloc = CurrencyBloc();
-  final BankPricesBloc bankPricesBloc = BankPricesBloc();
+  // final currency_bloc = CurrencyBloc();
+  // final BankPricesBloc bankPricesBloc = BankPricesBloc();
 
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  // // ScreenShot
+  // Uint8List _imageFileScreenShot;
+  // File _imageFile;
+
+  //Create an instance of ScreenshotController
+  ScreenshotController screenshotController = ScreenshotController();
   Color selectedItemColor;
   Color unselectedItemColor;
   Color selectedBgColor;
@@ -44,7 +56,7 @@ class HomePageState extends State<HomePage> {
   final key = GlobalKey();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext mContext) {
     selectedItemColor = Colors.white;
     unselectedItemColor = Colors.white;
     selectedBgColor = Theme.of(context).primaryColor;
@@ -52,147 +64,175 @@ class HomePageState extends State<HomePage> {
 
     return Scaffold(
       key: key,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Text(
-          'بكام اليوم؟',
-          style: TextStyle(fontFamily: 'Lalezar'),
+      // appBar: AppBar(
+      //   backgroundColor: Theme.of(context).primaryColor,
+      //   title: Text(
+      //     'بكام اليوم؟',
+      //     style: TextStyle(fontFamily: 'Lalezar'),
+      //   ),
+      //   automaticallyImplyLeading: false,
+      //   actions: [
+      //     _imageFileScreenShot != null
+      //         ? Image.memory(_imageFileScreenShot)
+      //         : Container(),
+      //     Container(
+      //         padding: EdgeInsets.only(right: 20.0, left: 20.0),
+      //         child: GestureDetector(
+      //           onTap: () {},
+      //           child: SvgPicture.asset(
+      //             'assets/images/refersh.svg',
+      //             width: 82.sp,
+      //             height: 85.sp,
+      //             fit: BoxFit.contain,
+      //           ),
+      //         )),
+      //     Container(
+      //         padding: EdgeInsets.only(right: 12),
+      //         child: GestureDetector(
+      //           onTap: () {
+      //             screenshotController
+      //                 .capture(pixelRatio: 1.5)
+      //                 .then((Uint8List image) {
+      //               //Capture Done
+      //               setState(() {
+      //                 _imageFileScreenShot = image;
+      //                 _imageFile = File.fromRawPath(_imageFileScreenShot);
+      //                 _shareImage(_imageFileScreenShot);
+      //               });
+      //             }).catchError((onError) {
+      //               print(onError);
+      //             });
+      //
+      //             // final directory = (await getApplicationDocumentsDirectory ()).path; //from path_provide package
+      //             // String fileName = DateTime.now().microsecondsSinceEpoch;
+      //             // String path = '$directory';
+      //             //
+      //             // screenshotController.captureAndSave(
+      //             // path //set path where screenshot will be saved
+      //             // fileName:fileName
+      //             // );
+      //           },
+      //           child: SvgPicture.asset(
+      //             'assets/images/camera.svg',
+      //             width: 107.sp,
+      //             height: 77.sp,
+      //             fit: BoxFit.contain,
+      //           ),
+      //         )),
+      //     PopupMenuButton(
+      //       icon: SvgPicture.asset(
+      //         'assets/images/choiseCoin.svg',
+      //         width: 131.sp,
+      //         height: 85.sp,
+      //         fit: BoxFit.contain,
+      //       ),
+      //       itemBuilder: (context) {
+      //         return [
+      //           PopupMenuItem<int>(
+      //             value: 0,
+      //             child: Column(
+      //               children: [
+      //                 Container(
+      //                     margin: EdgeInsets.symmetric(horizontal: 20.0.sp),
+      //                     child: Row(
+      //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      //                         children: [
+      //                           Container(
+      //                             width: 145.71.sp,
+      //                             height: 76.72.sp,
+      //                             child: SvgPicture.asset(
+      //                               'assets/images/coin.svg',
+      //                             ),
+      //                           ),
+      //                           TextTitle('إختر العملة',
+      //                               Theme.of(context).textTheme.subtitle2),
+      //                         ])),
+      //                 Divider(
+      //                   color: Theme.of(context).primaryColor,
+      //                   thickness: 2,
+      //                 ),
+      //               ],
+      //             ),
+      //           ),
+      //           PopupMenuItem<int>(
+      //             value: 1,
+      //             child: Container(
+      //               // height: 663.14.sp, // Change as per your requirement
+      //               width: 1141.32.sp, // Change as per your requirement
+      //               child: BlocProvider<CurrencyBloc>(
+      //                 create: (context) =>
+      //                     currency_bloc..add(LoadCurrencyEvent()),
+      //                 child: BlocBuilder<CurrencyBloc, CurrencyState>(
+      //                     builder: (context, state) {
+      //                   if (state is LoadingCurrencyState) {
+      //                     return Center(
+      //                       child: Container(
+      //                         padding: EdgeInsets.all(48.0.sp),
+      //                         child: showProgressLoading(),
+      //                       ),
+      //                     );
+      //                   } else if (state is LoadedCurrencyState) {
+      //                     return ListView.builder(
+      //                       shrinkWrap: true,
+      //                       itemExtent: 42.0,
+      //                       itemCount:
+      //                           state.response.ebody?.current?.length ?? 0,
+      //                       itemBuilder: (context, index) => Container(
+      //                         //padding: EdgeInsets.all(2.0),
+      //                         child: Material(
+      //                           elevation: 2.0,
+      //                           //borderRadius: BorderRadius.circular(5.0),F2F8F8
+      //                           color: index % 2 == 0
+      //                               ? Theme.of(context).primaryColorLight
+      //                               : Colors.white,
+      //                           child: ChoiseCoinCard(
+      //                             state.response.ebody?.current[index].image ??
+      //                                 '',
+      //                             state.response.ebody?.current[index].nameAr,
+      //                             state.response.ebody?.current[index].nameEn,
+      //                             onPressed: () {
+      //                               SelectedCurrency(state
+      //                                   .response.ebody?.current[index].id);
+      //                             },
+      //                           ),
+      //                         ),
+      //                       ),
+      //                     );
+      //                   } else if (state is FailedCurrencyState) {
+      //                     return TextTitle(
+      //                         '', Theme.of(context).textTheme.subtitle1);
+      //                   } else {
+      //                     return TextTitle(
+      //                         '', Theme.of(context).textTheme.subtitle1);
+      //                   }
+      //                 }),
+      //               ),
+      //             ),
+      //           ),
+      //         ];
+      //       },
+      //       onSelected: (value) {
+      //         if (value == 0) {
+      //           // print("My account menu is selected.");
+      //         } else if (value == 1) {
+      //           // print("Settings menu is selected.");
+      //         }
+      //       },
+      //     ),
+      //     SizedBox(width: 12.0)
+      //   ],
+      // ),
+      body: Screenshot(
+        controller: screenshotController,
+        child: Center(
+          child: [
+            BankPricesScreen(),
+            MarketPricesScreen(),
+            ExpectPricesScreen(),
+            GoldPricesScreen(),
+            MenuScreen(),
+          ].elementAt(_selectedIndex),
         ),
-        automaticallyImplyLeading: false,
-        actions: [
-          Container(
-              padding: EdgeInsets.only(right: 20.0, left: 20.0),
-              child: GestureDetector(
-                onTap: () {},
-                child: SvgPicture.asset(
-                  'assets/images/refersh.svg',
-                  width: 82.sp,
-                  height: 85.sp,
-                  fit: BoxFit.contain,
-                ),
-              )),
-          Container(
-              padding: EdgeInsets.only(right: 12),
-              child: GestureDetector(
-                onTap: () {},
-                child: SvgPicture.asset(
-                  'assets/images/camera.svg',
-                  width: 107.sp,
-                  height: 77.sp,
-                  fit: BoxFit.contain,
-                ),
-              )),
-          PopupMenuButton(
-            icon: SvgPicture.asset(
-              'assets/images/choiseCoin.svg',
-              width: 131.sp,
-              height: 85.sp,
-              fit: BoxFit.contain,
-            ),
-            itemBuilder: (context) {
-              return [
-                PopupMenuItem<int>(
-                  value: 0,
-                  child: Column(
-                    children: [
-                      Container(
-                          margin: EdgeInsets.symmetric(horizontal: 20.0.sp),
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Container(
-                                  width: 145.71.sp,
-                                  height: 76.72.sp,
-                                  child: SvgPicture.asset(
-                                    'assets/images/coin.svg',
-                                  ),
-                                ),
-                                TextTitle('إختر العملة',
-                                    Theme.of(context).textTheme.subtitle2),
-                              ])),
-                      Divider(
-                        color: Theme.of(context).primaryColor,
-                        thickness: 2,
-                      ),
-                    ],
-                  ),
-                ),
-                PopupMenuItem<int>(
-                  value: 1,
-                  child: Container(
-                    // height: 663.14.sp, // Change as per your requirement
-                    width: 1141.32.sp, // Change as per your requirement
-                    child: BlocProvider<CurrencyBloc>(
-                      create: (context) =>
-                          currency_bloc..add(LoadCurrencyEvent()),
-                      child: BlocBuilder<CurrencyBloc, CurrencyState>(
-                          builder: (context, state) {
-                        if (state is LoadingCurrencyState) {
-                          return Center(
-                            child: Container(
-                              padding: EdgeInsets.all(48.0.sp),
-                              child: showProgressLoading(),
-                            ),
-                          );
-                        } else if (state is LoadedCurrencyState) {
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            itemExtent: 42.0,
-                            itemCount:
-                                state.response.ebody?.current?.length ?? 0,
-                            itemBuilder: (context, index) => Container(
-                              //padding: EdgeInsets.all(2.0),
-                              child: Material(
-                                elevation: 2.0,
-                                //borderRadius: BorderRadius.circular(5.0),F2F8F8
-                                color: index % 2 == 0
-                                    ? Theme.of(context).primaryColorLight
-                                    : Colors.white,
-                                child: ChoiseCoinCard(
-                                  state.response.ebody?.current[index].image ??
-                                      '',
-                                  state.response.ebody?.current[index].nameAr,
-                                  state.response.ebody?.current[index].nameEn,
-                                  onPressed: () {
-                                    SelectedCurrency(state
-                                        .response.ebody?.current[index].id);
-                                  },
-                                ),
-                              ),
-                            ),
-                          );
-                        } else if (state is FailedCurrencyState) {
-                          return TextTitle(
-                              '', Theme.of(context).textTheme.subtitle1);
-                        } else {
-                          return TextTitle(
-                              '', Theme.of(context).textTheme.subtitle1);
-                        }
-                      }),
-                    ),
-                  ),
-                ),
-              ];
-            },
-            onSelected: (value) {
-              if (value == 0) {
-                // print("My account menu is selected.");
-              } else if (value == 1) {
-                // print("Settings menu is selected.");
-              }
-            },
-          ),
-          SizedBox(width: 12.0)
-        ],
-      ),
-      body: Center(
-        child: [
-          BankPricesScreen(bankPricesBloc: bankPricesBloc),
-          MarketPricesScreen(),
-          ExpectPricesScreen(),
-          GoldPricesScreen(),
-          MenuScreen(),
-        ].elementAt(_selectedIndex),
       ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: unselectedBgColor,
@@ -280,12 +320,19 @@ class HomePageState extends State<HomePage> {
     });
   }
 
-  SelectedCurrency(int id) async {
-    final SharedPreferences prefs = await _prefs;
-    prefs.setInt('LastSelectedCurrencyId', id);
-    print('LastSelectedCurrencyId :  ${id}');
-    bankPricesBloc..add(LoadBankPricesEvent(id: id));
+  _shareImage(Uint8List uint8list) async {
+    try {
+      // final ByteData bytes = await rootBundle.load('assets/image.jpg');
+      // final Uint8List list = bytes.buffer.asUint8List();
 
-    Navigator.pop(context);
+      final tempDir = await getTemporaryDirectory();
+      final file = await new File('${tempDir.path}/image.jpg').create();
+      file.writeAsBytesSync(uint8list);
+
+      final channel = const MethodChannel('channel:me.albie.share/share');
+      channel.invokeMethod('shareFile', 'image.jpg');
+    } catch (e) {
+      print('Share error: $e');
+    }
   }
 }

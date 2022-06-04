@@ -10,16 +10,18 @@ class Btn extends StatelessWidget {
 
   double verticalMargin = 0, horizontal;
 
-  Btn(this.text,
-      {this.width = double.infinity,
-      this.height = 48.0,
-      this.verticalMargin = 0,
-      this.horizontal = 24,
-      this.color = const Color(0xFF4D8D8F),
-      this.textColor = Colors.white,
-      this.onPressed,
-      this.fontSize = 10,
-      this.fontWeight});
+  Btn(
+    this.text, {
+    this.width = double.infinity,
+    this.height = 48.0,
+    this.verticalMargin = 0,
+    this.horizontal = 24,
+    this.color = const Color(0xFF4D8D8F),
+    this.textColor = Colors.white,
+    this.onPressed,
+    this.fontSize = 10,
+    this.fontWeight,
+  });
 
   @override
   Widget build(BuildContext context) {

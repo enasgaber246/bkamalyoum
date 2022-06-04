@@ -8,14 +8,20 @@ import 'PrivacyPolicyBloc.dart';
 
 class PrivacyPolicyScreen extends StatelessWidget {
   final privacy_bloc = PrivacyPolicyBloc();
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext mContext) {
     // TODO: implement build
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Theme.of(mContext).primaryColor,
+          title: Text(
+            'بكام اليوم؟',
+            style: TextStyle(fontFamily: 'Lalezar'),
+          ),
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(mContext).pop(),
           ),
         ),
         body: SingleChildScrollView(

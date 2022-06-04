@@ -10,24 +10,29 @@ import 'NewsBloc.dart';
 class NewsScreen extends StatelessWidget {
   final currency_bloc = NewsBloc();
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext mContext) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+        appBar: AppBar(
+          backgroundColor: Theme.of(mContext).primaryColor,
+          title: Text(
+            'بكام اليوم؟',
+            style: TextStyle(fontFamily: 'Lalezar'),
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () => Navigator.of(mContext).pop(),
+          ),
         ),
-      ),
       body: SingleChildScrollView(
       child:Column(
         children: [
           TextTitle(
             'اهم الاخبار',
-            Theme.of(context).textTheme.subtitle2,
+            Theme.of(mContext).textTheme.subtitle2,
           ),
           Divider(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(mContext).primaryColor,
             thickness: 1,
           ),
           BlocProvider<NewsBloc>(

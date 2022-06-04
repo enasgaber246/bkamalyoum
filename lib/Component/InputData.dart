@@ -9,15 +9,19 @@ class InputData extends StatelessWidget {
   TextInputType keyboardType = TextInputType.text;
   TextEditingController ctrl;
   FormFieldValidator<String> validator;
-  InputData(
-      {this.verticalMargin = 0,
-      this.horizontal = 24,
-      this.width = double.infinity,
-      this.height = 48.0,
-      this.ctrl,
-      this.keyboardType,
-      this.enabled,
-      this.validator});
+  final bool isPass;
+  final Widget suffixIcon;
+
+  InputData({
+    this.verticalMargin = 0,
+    this.horizontal = 24,
+    this.width = double.infinity,
+    this.height = 48.0,
+    this.ctrl,
+    this.keyboardType,
+    this.enabled,
+    this.validator,this.isPass, this.suffixIcon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +29,8 @@ class InputData extends StatelessWidget {
     return Container(
         margin: EdgeInsets.symmetric(
             horizontal: horizontal.sp, vertical: verticalMargin.sp),
-        height: height.sp,
+        padding: EdgeInsets.symmetric(horizontal: 24.sp),
+        // height: height.sp,
         decoration: new BoxDecoration(
             color: Theme.of(context).primaryColor.withAlpha(50),
             border: Border.all(color: const Color(0xFF4D8D8F)),
@@ -37,6 +42,7 @@ class InputData extends StatelessWidget {
           keyboardType: keyboardType,
           validator: validator,
           controller: ctrl,
+          obscureText: isPass,
           decoration: InputDecoration(
             border: InputBorder.none,
             errorStyle: TextStyle(
@@ -49,6 +55,7 @@ class InputData extends StatelessWidget {
             hintStyle: TextStyle(
               fontSize: 14.0,
             ),
+            suffixIcon: suffixIcon,
           ),
         ));
   }

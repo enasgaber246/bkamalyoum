@@ -1,3 +1,4 @@
+import 'package:bkamalyoum/Component/AppBarCustom.dart';
 import 'package:bkamalyoum/Component/Components.dart';
 import 'package:bkamalyoum/Component/GoldCard.dart';
 import 'package:bkamalyoum/Component/TextTitle.dart';
@@ -23,46 +24,55 @@ class GoldPricesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext mContext) {
-    // TODO: implement build
     initializeDateFormatting('ar');
 
     return Scaffold(
+      appBar: AppBarCustom(
+        mContext: mContext,
+        automaticallyImplyLeading: false,
+        onTapCamera: () async {},
+        onReloadTap: () async {
+          bloc.add(LoadMetalPricesEvent());
+        },
+      ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Container(
-          child: Column(
-            children: [
-              TextTitle(
-                '  تحديث ${getDateFormatted()}',
-                Theme.of(mContext).textTheme.subtitle1,
-              ),
-              // List
-              BlocProvider<GoldPricesBloc>(
-                create: (context) => bloc..add(LoadMetalPricesEvent()),
-                child: BlocBuilder<GoldPricesBloc, MetalPricesState>(
-                    builder: (context, state) {
-                  if (state is LoadingMetalPricesState) {
-                    return Center(
-                      child: Container(
-                        padding: EdgeInsets.all(48.0.sp),
-                        child: showProgressLoading(),
-                      ),
-                    );
-                  } else if (state is LoadedMetalPricesState) {
-                    return ListView.builder(
+          child: BlocProvider<GoldPricesBloc>(
+            create: (context) => bloc..add(LoadMetalPricesEvent()),
+            child: BlocBuilder<GoldPricesBloc, MetalPricesState>(
+                builder: (context, state) {
+              if (state is LoadingMetalPricesState) {
+                return Center(
+                  child: Container(
+                    padding: EdgeInsets.all(148.0.sp),
+                    child: showProgressLoading(),
+                  ),
+                );
+              } else if (state is LoadedMetalPricesState) {
+                return Column(
+                  children: [
+                    TextTitle(
+                      '  تحديث ${getDateFormatted()}',
+                      Theme.of(mContext).textTheme.subtitle1,
+                    ),
+                    ListView.builder(
                       // itemExtent: 42.0,
                       itemCount: state.response?.ebody?.length ?? 0,
                       shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) =>
                           metalCard(mContext, state.response?.ebody[index]),
-                    );
-                  } else if (state is FailedMetalPricesState) {
-                    return TextTitle('', Theme.of(context).textTheme.subtitle1);
-                  } else {
-                    return TextTitle('', Theme.of(context).textTheme.subtitle1);
-                  }
-                }),
-              ),
-            ],
+                    ),
+                    SizedBox(height: 124.sp),
+                  ],
+                );
+              } else if (state is FailedMetalPricesState) {
+                return TextTitle('', Theme.of(context).textTheme.subtitle1);
+              } else {
+                return TextTitle('', Theme.of(context).textTheme.subtitle1);
+              }
+            }),
           ),
         ),
       ),
@@ -95,6 +105,7 @@ class GoldPricesScreen extends StatelessWidget {
             itemExtent: 42.0,
             itemCount: categoryModel.metals?.length ?? 0,
             shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) => Container(
               //padding: EdgeInsets.all(2.0),
               child: Material(

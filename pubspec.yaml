@@ -44,6 +44,9 @@ dependencies:
   rate_my_app: ^0.7.2
   flutter_share: ^1.0.5
   intl: ^0.17.0
+  screenshot: ^0.3.0
+  path_provider: ^1.6.28
+  rflutter_alert: ^1.0.2
 
 dev_dependencies:
   flutter_test:

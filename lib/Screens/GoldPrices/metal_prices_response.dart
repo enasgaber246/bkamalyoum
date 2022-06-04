@@ -58,6 +58,8 @@ class MetalCategoryModel {
   String nameAr;
   String image;
   List<MetalModel> metals;
+  bool isSubscribed;
+
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:bkamalyoum/Component/AppBarCustom.dart';
 import 'package:bkamalyoum/Component/MenuCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:rate_my_app/rate_my_app.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'News/NewsScreen.dart';
 import 'PrivacyPolicy/PrivacyPolicyScreen.dart';
@@ -12,63 +14,72 @@ import 'Setting/SettingScreen.dart';
 
 class MenuScreen extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext mContext) {
     // TODO: implement build
-    return Column(
-      children: [
-        MenuCard('اهم الاخبار', 'assets/images/news.svg', () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => NewsScreen()),
-          );
-        }),
-        Divider(
-          color: Theme.of(context).dividerColor,
-          thickness: 1,
-        ),
-        MenuCard('اتصل بنا', 'assets/images/call_us.svg', () async {
-          const number = '+201069761802';
-          bool res = await FlutterPhoneDirectCaller.callNumber(number);
-        }),
-        Divider(
-          color: Theme.of(context).dividerColor,
-          thickness: 1,
-        ),
-        MenuCard('قيم التطبيق', 'assets/images/rate_app.svg', () {
-          rateTheApp(context);
-        }),
-        Divider(
-          color: Theme.of(context).dividerColor,
-          thickness: 1,
-        ),
-        MenuCard('شارك التطبيق', 'assets/images/share_app.svg', () {
-          shareAppUrl('https://flutter.dev/');
-        }),
-        Divider(
-          color: Theme.of(context).dividerColor,
-          thickness: 1,
-        ),
-        MenuCard('الإعدادات', 'assets/images/setting.svg', () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SettingScreen()),
-          );
-        }),
-        Divider(
-          color: Theme.of(context).dividerColor,
-          thickness: 1,
-        ),
-        MenuCard('Privacy Policy', 'assets/images/privacyandpolicy.svg', () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => PrivacyPolicyScreen()),
-          );
-        }),
-        Divider(
-          color: Theme.of(context).dividerColor,
-          thickness: 1,
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBarCustom(
+        mContext: mContext,
+        automaticallyImplyLeading: false,
+      ),
+      body: Column(
+        children: [
+          MenuCard('اهم الاخبار', 'assets/images/news.svg', () {
+            Navigator.push(
+              mContext,
+              MaterialPageRoute(builder: (context) => NewsScreen()),
+            );
+          }),
+          Divider(
+            color: Theme.of(mContext).dividerColor,
+            thickness: 1,
+          ),
+          MenuCard('اتصل بنا', 'assets/images/call_us.svg', () async {
+            const number = '+201069761802';
+            bool res = await FlutterPhoneDirectCaller.callNumber(number);
+          }),
+          Divider(
+            color: Theme.of(mContext).dividerColor,
+            thickness: 1,
+          ),
+          MenuCard('قيم التطبيق', 'assets/images/rate_app.svg', () {
+            rateTheApp(mContext);
+          }),
+          Divider(
+            color: Theme.of(mContext).dividerColor,
+            thickness: 1,
+          ),
+          MenuCard('شارك التطبيق', 'assets/images/share_app.svg', () {
+            shareAppUrl('https://flutter.dev/');
+          }),
+          Divider(
+            color: Theme.of(mContext).dividerColor,
+            thickness: 1,
+          ),
+          MenuCard('الإعدادات', 'assets/images/setting.svg', () async {
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+
+            Navigator.push(
+              mContext,
+              MaterialPageRoute(
+                  builder: (context) => SettingScreen(prefs: prefs)),
+            );
+          }),
+          Divider(
+            color: Theme.of(mContext).dividerColor,
+            thickness: 1,
+          ),
+          MenuCard('Privacy Policy', 'assets/images/privacyandpolicy.svg', () {
+            Navigator.push(
+              mContext,
+              MaterialPageRoute(builder: (context) => PrivacyPolicyScreen()),
+            );
+          }),
+          Divider(
+            color: Theme.of(mContext).dividerColor,
+            thickness: 1,
+          ),
+        ],
+      ),
     );
   }
 
@@ -77,8 +88,7 @@ class MenuScreen extends StatelessWidget {
         title: 'شارك التطبيق',
         text: 'شارك التطبيق مع اصدقائك',
         linkUrl: appUrl,
-        chooserTitle: 'Example Chooser Title'
-    );
+        chooserTitle: 'Example Chooser Title');
   }
 
   rateTheApp(BuildContext context) {
