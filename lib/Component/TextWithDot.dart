@@ -17,6 +17,7 @@ class TextWithDot extends StatelessWidget{
      mainAxisAlignment: MainAxisAlignment.end,
      children: [
        Container(
+         // padding: EdgeInsets.symmetric(vertical: 24.sp),
          alignment: Alignment.centerRight,
          child: TextTitle(
              text,style,fontSize: fontSize,),

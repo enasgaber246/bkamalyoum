@@ -6,6 +6,7 @@ import 'package:flutter_session/flutter_session.dart';
 import 'package:localize_and_translate/localize_and_translate.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'Screens/Splash/splash.dart';
 
@@ -66,35 +67,35 @@ class MyApp extends StatelessWidget {
                   primaryColorLight: Color(0xFFF2F8F8),
                   dividerColor: Color(0xFF707070),
                   fontFamily: 'Dubai',
-                  textTheme: const TextTheme(
+                  textTheme: TextTheme(
                     headline1: TextStyle(
-                        fontSize: 36.0,
+                        fontSize: 75.0.sp,
                         fontWeight: FontWeight.bold,
                         color: Color(0xFF4D8D8F)),
                     headline2: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: 55.0.sp,
                         fontWeight: FontWeight.normal,
                         color: Color(0xFF4D8D8F)),
                     headline3: TextStyle(
-                        fontSize: 10.0,
+                        fontSize: 48.0.sp,
                         fontWeight: FontWeight.normal,
                         color: Color(0xFF4D8D8F)),
                     subtitle1: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: 55.0.sp,
                         fontStyle: FontStyle.normal,
                         color: Colors.black,
                         fontWeight: FontWeight.w300),
                     subtitle2: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: 55.0.sp,
                         fontStyle: FontStyle.normal,
                         color: Colors.black,
                         fontWeight: FontWeight.w500),
                     bodyText1: TextStyle(
-                      fontSize: 12.0,
+                      fontSize: 48.0.sp,
                       fontFamily: 'Dubai',
                     ),
                     bodyText2: TextStyle(
-                      fontSize: 12.0,
+                      fontSize: 48.0.sp,
                       fontFamily: 'Dubai',
                       color: Colors.white,
                     ),

@@ -10,13 +10,16 @@ class TextTitle extends StatelessWidget {
   FontWeight fontWeight;
   int lines;
 
-  TextTitle(this.text, this.textStyle,
-      {this.fontSize,
-      this.horizontal,
-      this.vertical,
-      this.textAlign = TextAlign.end,
-      this.fontWeight,
-      this.lines});
+  TextTitle(
+    this.text,
+    this.textStyle, {
+    this.fontSize,
+    this.horizontal,
+    this.vertical,
+    this.textAlign = TextAlign.end,
+    this.fontWeight,
+    this.lines,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,6 @@ class TextTitle extends StatelessWidget {
       text,
       style: textStyle,
       textAlign: textAlign,
-
     );
   }
 }
