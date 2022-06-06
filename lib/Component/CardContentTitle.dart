@@ -11,6 +11,7 @@ class CardContentTitle extends StatelessWidget {
   TextStyle textStyle;
   String networkUrl;
 
+  final int arrangeType;
   final GestureTapCallback onClickBuyBtn;
   final GestureTapCallback onClickSellBtn;
 
@@ -23,6 +24,7 @@ class CardContentTitle extends StatelessWidget {
     this.networkUrl,
     this.onClickBuyBtn,
     this.onClickSellBtn,
+    this.arrangeType,
   });
 
   @override
@@ -46,13 +48,26 @@ class CardContentTitle extends StatelessWidget {
                       children: [
                         // arrow_arrange_down.svg
                         // arrow_arrange_up.svg
-                        SvgPicture.asset(
-                          'assets/images/arrow_arrange_down.svg',
-                          width: 48.sp,
-                          height: 48.sp,
-                          fit: BoxFit.contain,
-                          color: Colors.grey,
-                        ),
+                        (arrangeType == 1)
+                            ? SvgPicture.asset(
+                                'assets/images/arrow_arrange_up.svg',
+                                width: 48.sp,
+                                height: 48.sp,
+                                fit: BoxFit.contain,
+                                color: Colors.grey,
+                              )
+                            : ((arrangeType == 2)
+                                ? SvgPicture.asset(
+                                    'assets/images/arrow_arrange_down.svg',
+                                    width: 48.sp,
+                                    height: 48.sp,
+                                    fit: BoxFit.contain,
+                                    color: Colors.grey,
+                                  )
+                                : SizedBox(
+                                    width: 48.sp,
+                                    height: 48.sp,
+                                  )),
                         TextTitle(
                           text2 ?? '-',
                           textStyle,
@@ -64,19 +79,32 @@ class CardContentTitle extends StatelessWidget {
                 ),
                 Expanded(
                   child: InkWell(
-                    onTap: onClickBuyBtn,
+                    onTap: onClickSellBtn,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         // arrow_arrange_down.svg
                         // arrow_arrange_up.svg
-                        SvgPicture.asset(
+                        (arrangeType == 3)
+                            ? SvgPicture.asset(
                           'assets/images/arrow_arrange_up.svg',
                           width: 48.sp,
                           height: 48.sp,
                           fit: BoxFit.contain,
                           color: Colors.grey,
-                        ),
+                        )
+                            : ((arrangeType == 4)
+                            ? SvgPicture.asset(
+                          'assets/images/arrow_arrange_down.svg',
+                          width: 48.sp,
+                          height: 48.sp,
+                          fit: BoxFit.contain,
+                          color: Colors.grey,
+                        )
+                            : SizedBox(
+                          width: 48.sp,
+                          height: 48.sp,
+                        )),
                         TextTitle(
                           text3 ?? '-',
                           textStyle,

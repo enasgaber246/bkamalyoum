@@ -6,6 +6,7 @@ import 'BankPricesResponse.dart';
 
 class BankPricesBloc extends Bloc<BankPricesEvent, BankPricesState> {
   BankPricesBloc() : super(LoadingBankPricesState());
+  BankPricesResponse _bankPricesResponse;
 
   @override
   Stream<BankPricesState> mapEventToState(BankPricesEvent event) async* {
@@ -34,9 +35,16 @@ class BankPricesBloc extends Bloc<BankPricesEvent, BankPricesState> {
         print('LoadBankPricesEvent Response :  ${data.toString()}');
         BankPricesResponse response = BankPricesResponse.fromJson(data);
 
-        if (response.ecode == 200) {
+        response.ebody = response.ebody
+            .where((i) => (i.buyingPrice != null && i.sellingPrice != null))
+            .toList();
+
+        _bankPricesResponse = response;
+
+        if (_bankPricesResponse.ecode == 200) {
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          yield LoadedBankPricesState(response: response, prefs: prefs);
+          yield LoadedBankPricesState(
+              response: _bankPricesResponse, prefs: prefs);
         } else {
           yield FailedBankPricesState();
         }
@@ -44,6 +52,32 @@ class BankPricesBloc extends Bloc<BankPricesEvent, BankPricesState> {
         print('LoadCurrencyEvent Error :  ' + e.toString());
         yield FailedBankPricesState();
       }
+    } else if (event is RearrangeBankPricesEvent) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      if (event.id == 1) {
+        // 1 Buying large first
+        _bankPricesResponse.ebody.sort((b, a) =>
+            double.parse(b.buyingPrice ?? '0')
+                .compareTo(double.parse(a.buyingPrice) ?? '0'));
+      } else if (event.id == 2) {
+        // 2 Buying small first
+        _bankPricesResponse.ebody.sort((a, b) =>
+            double.parse(b.buyingPrice ?? '0')
+                .compareTo(double.parse(a.buyingPrice) ?? '0'));
+      } else if (event.id == 3) {
+        // 3 Selling large first
+        _bankPricesResponse.ebody.sort((b, a) =>
+            double.parse(b.sellingPrice ?? '0')
+                .compareTo(double.parse(a.sellingPrice) ?? '0'));
+      } else {
+        // 4 Selling small first
+        _bankPricesResponse.ebody.sort((a, b) =>
+            double.parse(b.sellingPrice ?? '0')
+                .compareTo(double.parse(a.sellingPrice) ?? '0'));
+      }
+
+      yield LoadedBankPricesState(response: _bankPricesResponse, prefs: prefs);
     }
   }
 }
@@ -54,7 +88,18 @@ abstract class BankPricesEvent {}
 class LoadBankPricesEvent extends BankPricesEvent {
   final int id;
 
+  // 1 Buying large first
+  // 2 Buying small first
+  // 3 Selling large first
+  // 4 Selling small first
+
   LoadBankPricesEvent({this.id});
+}
+
+class RearrangeBankPricesEvent extends BankPricesEvent {
+  final int id;
+
+  RearrangeBankPricesEvent({this.id});
 }
 
 // Trip Details States

@@ -11,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'News/NewsScreen.dart';
 import 'PrivacyPolicy/PrivacyPolicyScreen.dart';
 import 'Setting/SettingScreen.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 class MenuScreen extends StatelessWidget {
   @override
@@ -35,7 +36,8 @@ class MenuScreen extends StatelessWidget {
           ),
           MenuCard('اتصل بنا', 'assets/images/call_us.svg', () async {
             const number = '+201069761802';
-            bool res = await FlutterPhoneDirectCaller.callNumber(number);
+            // bool res = await FlutterPhoneDirectCaller.callNumber(number);
+            UrlLauncher.launch("tel://${number}");
           }),
           Divider(
             color: Theme.of(mContext).dividerColor,

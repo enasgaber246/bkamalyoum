@@ -9,31 +9,39 @@ class InputDataWidget extends StatelessWidget {
   final bool isEnable;
   final double width;
   final double height;
+  final int maxLength;
 
-  const InputDataWidget(
-      {Key key, this.controller, this.keyboardType, this.onChanged,this.isEnable = true,this.width=1021.07,this.height= 148.67})
-      : super(key: key);
+  const InputDataWidget({
+    Key key,
+    this.controller,
+    this.keyboardType,
+    this.onChanged,
+    this.isEnable = true,
+    this.width = 1021.07,
+    this.height = 148.67,
+    this.maxLength,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext mcontext) {
     // TODO: implement build
     return Container(
       // margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-      padding: EdgeInsets.symmetric(horizontal: 50.0.sp),
-      height:height.sp,
+      padding: EdgeInsets.symmetric(horizontal: 50.0.sp, vertical: 16.sp),
+      height: height.sp,
       width: width.sp,
       decoration: BoxDecoration(
           border: Border.all(
-            color: Theme
-                .of(mcontext)
-                .primaryColor,
+            color: Theme.of(mcontext).primaryColor,
           ),
-          borderRadius: BorderRadius.all(Radius.circular(80.sp))),
+          borderRadius: BorderRadius.all(Radius.circular(100.sp))),
       child: TextField(
+        maxLength: maxLength,
         controller: controller,
         keyboardType: keyboardType,
         onChanged: onChanged,
         enabled: isEnable,
+        textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
           border: InputBorder.none,
         ),
