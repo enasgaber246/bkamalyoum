@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'BankPricesResponse.dart';
 
 class BankPricesBloc extends Bloc<BankPricesEvent, BankPricesState> {
@@ -34,7 +35,8 @@ class BankPricesBloc extends Bloc<BankPricesEvent, BankPricesState> {
         BankPricesResponse response = BankPricesResponse.fromJson(data);
 
         if (response.ecode == 200) {
-          yield LoadedBankPricesState(response: response);
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          yield LoadedBankPricesState(response: response, prefs: prefs);
         } else {
           yield FailedBankPricesState();
         }
@@ -62,8 +64,12 @@ class LoadingBankPricesState extends BankPricesState {}
 
 class LoadedBankPricesState extends BankPricesState {
   BankPricesResponse response;
+  SharedPreferences prefs;
 
-  LoadedBankPricesState({this.response});
+  LoadedBankPricesState({
+    this.response,
+    this.prefs,
+  });
 }
 
 class FailedBankPricesState extends BankPricesState {}

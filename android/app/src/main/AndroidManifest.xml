@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bkamalyoum.bkamalyoum">
    <application
-        android:label="bkamalyoum"
+        android:label="بكام اليوم؟"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

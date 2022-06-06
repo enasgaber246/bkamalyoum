@@ -68,17 +68,23 @@ class BankPricesScreen extends StatelessWidget {
                 Divider(
                   color: Colors.black26,
                 ),
-                CardContentTitle(
-                  (selectedCurrency?.nameEn ??
-                          (state.response?.ebody[0]?.currencyName ?? '')) +
-                      ' ' +
-                      (selectedCurrency?.nameAr ?? ''),
-                  'شراء',
-                  'بيع',
-                  Theme.of(context).textTheme.subtitle1,
-                  networkUrl: selectedCurrency?.image ??
-                      state.response?.ebody[0]?.currencyImage ??
-                      '',
+                InkWell(
+                  onTap: () {},
+                  child: CardContentTitle(
+                    (selectedCurrency?.nameEn ??
+                            (state.response?.ebody[0]?.currencyName ?? '')) +
+                        ' ' +
+                        (selectedCurrency?.nameAr ??
+                            (state.response?.ebody[0]?.currencyNameAr ?? '')),
+                    'شراء',
+                    'بيع',
+                    Theme.of(context).textTheme.subtitle1,
+                    networkUrl: selectedCurrency?.image ??
+                        state.response?.ebody[0]?.currencyImage ??
+                        '',
+                    onClickBuyBtn: () {},
+                    onClickSellBtn: () {},
+                  ),
                 ),
                 Divider(
                   color: Theme.of(context).primaryColor,
@@ -86,7 +92,7 @@ class BankPricesScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: ListView.builder(
-                    itemExtent: 42.0,
+                    // itemExtent: 42.0,
                     itemCount: state.response.ebody.length,
                     physics: BouncingScrollPhysics(),
                     itemBuilder: (context, index) => Container(
@@ -100,6 +106,7 @@ class BankPricesScreen extends StatelessWidget {
                         child: BankPricesCard(
                           state.response.ebody[index],
                           Theme.of(context).textTheme.subtitle1,
+                          state.prefs,
                         ),
                       ),
                     ),

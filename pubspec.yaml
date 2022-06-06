@@ -47,6 +47,7 @@ dependencies:
   screenshot: ^0.3.0
   path_provider: ^1.6.28
   rflutter_alert: ^1.0.2
+  flutter_verification_code: ^1.1.2+1
 
 dev_dependencies:
   flutter_test:

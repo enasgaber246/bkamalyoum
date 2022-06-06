@@ -205,6 +205,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_verification_code:
+    dependency: "direct main"
+    description:
+      name: flutter_verification_code
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.1.2+1"
   flutter_web_plugins:
     dependency: transitive
     description: flutter
@@ -546,4 +553,4 @@ packages:
     version: "4.5.1"
 sdks:
   dart: ">=2.12.0 <3.0.0"
-  flutter: ">=1.24.0-10.1.pre"
+  flutter: ">=2.0.0"
