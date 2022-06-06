@@ -11,6 +11,9 @@ class CardContentTitle extends StatelessWidget {
   TextStyle textStyle;
   String networkUrl;
 
+  final GestureTapCallback onClickBuyBtn;
+  final GestureTapCallback onClickSellBtn;
+
   CardContentTitle(
     // this.IconPath,
     this.text1,
@@ -18,6 +21,8 @@ class CardContentTitle extends StatelessWidget {
     this.text3,
     this.textStyle, {
     this.networkUrl,
+    this.onClickBuyBtn,
+    this.onClickSellBtn,
   });
 
   @override
@@ -34,17 +39,51 @@ class CardContentTitle extends StatelessWidget {
               children: [
                 // SizedBox(width: 80.sp),
                 Expanded(
-                  child: TextTitle(
-                    text2 ?? '-',
-                    textStyle,
-                    textAlign: TextAlign.center,
+                  child: InkWell(
+                    onTap: onClickBuyBtn,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // arrow_arrange_down.svg
+                        // arrow_arrange_up.svg
+                        SvgPicture.asset(
+                          'assets/images/arrow_arrange_down.svg',
+                          width: 48.sp,
+                          height: 48.sp,
+                          fit: BoxFit.contain,
+                          color: Colors.grey,
+                        ),
+                        TextTitle(
+                          text2 ?? '-',
+                          textStyle,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
-                  child: TextTitle(
-                    text3 ?? '-',
-                    textStyle,
-                    textAlign: TextAlign.center,
+                  child: InkWell(
+                    onTap: onClickBuyBtn,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // arrow_arrange_down.svg
+                        // arrow_arrange_up.svg
+                        SvgPicture.asset(
+                          'assets/images/arrow_arrange_up.svg',
+                          width: 48.sp,
+                          height: 48.sp,
+                          fit: BoxFit.contain,
+                          color: Colors.grey,
+                        ),
+                        TextTitle(
+                          text3 ?? '-',
+                          textStyle,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -59,9 +98,7 @@ class CardContentTitle extends StatelessWidget {
                   text1 ?? '-',
                   textStyle,
                 ),
-                SizedBox(
-                  width: 50.sp,
-                ),
+                SizedBox(width: 48.sp),
                 // Container(
                 //   width: 145.71.sp,
                 //   height: 76.72.sp,
@@ -71,13 +108,13 @@ class CardContentTitle extends StatelessWidget {
                 // ),
                 (networkUrl == null)
                     ? SizedBox(
-                        width: 100.sp,
-                        height: 100.sp,
+                        width: 156.sp,
+                        height: 124.sp,
                       )
                     : Container(
-                        width: 100.sp,
-                        height: 100.sp,
-                        padding: EdgeInsets.all(5.0.sp),
+                        width: 156.sp,
+                        height: 124.sp,
+                        padding: EdgeInsets.all(12.0.sp),
                         child: Image.network(
                           'https://bkamalyoum.com/uploads/small/${networkUrl}',
                           fit: BoxFit.fill,
@@ -96,6 +133,7 @@ class CardContentTitle extends StatelessWidget {
                           },
                         ),
                       ),
+                SizedBox(width: 16.sp),
               ],
             ),
           ),

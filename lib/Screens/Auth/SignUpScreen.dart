@@ -4,6 +4,7 @@ import 'package:bkamalyoum/Component/AuthInputData.dart';
 import 'package:bkamalyoum/Component/Btn.dart';
 import 'package:bkamalyoum/Component/Components.dart';
 import 'package:bkamalyoum/Component/TextTitle.dart';
+import 'package:bkamalyoum/Screens/ConfirmPhoneNumber/ConfirmPhoneNumberScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -151,7 +152,7 @@ class _signupScreenState extends State<SignupScreen> {
                   // }
                 }
               },
-            )
+            ),
           ],
         ),
       ),
@@ -184,13 +185,19 @@ class _signupScreenState extends State<SignupScreen> {
       print('LoadLoginEvent Response :  ${data.toString()}');
       RegisterResponse response = RegisterResponse.fromJson(data);
 
-      if (res.statusCode == 200) {
+      if (response.ecode == 200) {
         // prefs.setString('token_type', response.tokenType ?? '');
         // prefs.setString('accessToken', response.accessToken ?? '');
         // prefs.setString('refreshToken', response.refreshToken ?? '');
 
         // Navigator.pop(mContext);
-        showMsg(mContext, 'تم تسجيل الحساب، رجاء تسجيل الدخول');
+        // showMsg(mContext, 'تم تسجيل الحساب، رجاء تسجيل الدخول');
+
+        Navigator.of(mContext).push(MaterialPageRoute(
+            builder: (context) => ConfirmPhoneNumberScreen(
+              phone_number: phoneCtrl.text ?? '',
+            )));
+
         return response;
       } else {
         showMsg(mContext, response?.emsg ?? '');

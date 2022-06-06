@@ -39,6 +39,7 @@ class MarketPricesScreen extends StatelessWidget {
         },
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Column(
           children: [
             BlocProvider<MarketPricesBloc>(
