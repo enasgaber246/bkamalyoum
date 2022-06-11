@@ -1,20 +1,28 @@
+import 'dart:typed_data';
+
 import 'package:bkamalyoum/Component/AppBarCustom.dart';
 import 'package:bkamalyoum/Component/CardContent.dart';
 import 'package:bkamalyoum/Component/CardContentTitle.dart';
 import 'package:bkamalyoum/Component/Components.dart';
 import 'package:bkamalyoum/Component/TextTitle.dart';
+import 'package:esys_flutter_share/esys_flutter_share.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'MarketPricesBloc.dart';
 
 class MarketPricesScreen extends StatelessWidget {
   final MarketPricesBloc marketPricesBloc = MarketPricesBloc();
+
+  // ScreenShot
+  ScreenshotController screenshotController = ScreenshotController();
+  Uint8List _imageFileScreenShot;
 
   String getDateFormatted() {
     var now = new DateTime.now();
@@ -33,143 +41,157 @@ class MarketPricesScreen extends StatelessWidget {
       appBar: AppBarCustom(
         mContext: mContext,
         automaticallyImplyLeading: false,
-        onTapCamera: () async {},
+        onTapCamera: () async {
+          screenshotController
+              .capture(pixelRatio: 1.5)
+              .then((Uint8List image) async {
+            //Capture Done
+            _imageFileScreenShot = image;
+            await Share.file(
+                'بكام اليوم', 'bkamelyoum.jpg', _imageFileScreenShot, 'image/jpg');
+          }).catchError((onError) {
+            print(onError);
+          });
+        },
         onReloadTap: () async {
           marketPricesBloc.add(LoadMarketPricesEvent());
         },
       ),
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Column(
-          children: [
-            BlocProvider<MarketPricesBloc>(
-              create: (context) => marketPricesBloc..add(LoadMarketPricesEvent()),
-              child: BlocBuilder<MarketPricesBloc, MarketPricesState>(
-                  builder: (context, state) {
-                if (state is LoadingMarketPricesState) {
-                  return Center(
-                    child: Container(
-                      padding: EdgeInsets.all(148.0.sp),
-                      child: showProgressLoading(),
-                    ),
-                  );
-                } else if (state is LoadedMarketPricesState) {
-                  return Column(
-                    children: [
-                      TextTitle(
-                        ' تحديث ${getDateFormatted()}',
-                        Theme.of(context).textTheme.subtitle1,
+      body: Screenshot(
+        controller: screenshotController,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              BlocProvider<MarketPricesBloc>(
+                create: (context) => marketPricesBloc..add(LoadMarketPricesEvent()),
+                child: BlocBuilder<MarketPricesBloc, MarketPricesState>(
+                    builder: (context, state) {
+                  if (state is LoadingMarketPricesState) {
+                    return Center(
+                      child: Container(
+                        padding: EdgeInsets.all(148.0.sp),
+                        child: showProgressLoading(),
                       ),
-                      Divider(
-                        color: Theme.of(context).primaryColor,
-                        thickness: 1,
-                      ),
-                      CardContentTitle(
-                          ' USA دولار أمريكي',
-                          'شراء',
-                          'بيع',
-                          Theme.of(context).textTheme.headline2),
-                      Divider(
-                        color: Theme.of(context).primaryColor,
-                        thickness: 1,
-                      ),
-                      ListView.builder(
-                        itemExtent: 42.0,
-                        itemCount: state.response.ebody.current.length,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) => Container(
-                          //padding: EdgeInsets.all(2.0),
-                          child: Material(
+                    );
+                  } else if (state is LoadedMarketPricesState) {
+                    return Column(
+                      children: [
+                        TextTitle(
+                          ' تحديث ${getDateFormatted()}',
+                          Theme.of(context).textTheme.subtitle1,
+                        ),
+                        Divider(
+                          color: Theme.of(context).primaryColor,
+                          thickness: 1,
+                        ),
+                        CardContentTitle(
+                            ' أسعار السوق الحالية ',
+                            'شراء',
+                            'بيع',
+                            Theme.of(context).textTheme.headline2),
+                        Divider(
+                          color: Theme.of(context).primaryColor,
+                          thickness: 1,
+                        ),
+                        ListView.builder(
+                          itemExtent: 42.0,
+                          itemCount: state.response.ebody.current.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) => Container(
+                            //padding: EdgeInsets.all(2.0),
+                            child: Material(
+                                // elevation: 2.0,
+                                //borderRadius: BorderRadius.circular(5.0),F2F8F8
+                                color: index % 2 == 0
+                                    ? Theme.of(context).primaryColorLight
+                                    : Colors.white,
+                                child: CardContentTitle(
+                                  state.response.ebody?.current[index]?.nameAr ??
+                                      '',
+                                  numberFormat.format(double.parse(state.response
+                                              .ebody?.current[index]?.buyingPrice ??
+                                          '0')) ??
+                                      '-',
+                                  numberFormat.format(double.parse(state
+                                              .response
+                                              .ebody
+                                              ?.current[index]
+                                              ?.sellingPrice ??
+                                          '0')) ??
+                                      '-',
+                                  Theme.of(context).textTheme.subtitle1,
+                                  networkUrl:
+                                      state.response.ebody?.current[index].image ??
+                                          '',
+                                )),
+                          ),
+                        ),
+                        SizedBox(height: 124.sp),
+                        Divider(
+                          color: Theme.of(context).primaryColor,
+                          thickness: 1,
+                        ),
+                        CardContentTitle(
+                            ' أسعار السوق المتوقعة ',
+                            'شراء',
+                            'بيع',
+                            Theme.of(context).textTheme.headline2),
+                        Divider(
+                          color: Theme.of(context).primaryColor,
+                          thickness: 1,
+                        ),
+                        ListView.builder(
+                          itemExtent: 42.0,
+                          itemCount: state.response.ebody.expectaions.length,
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) => Container(
+                            //padding: EdgeInsets.all(2.0),
+                            child: Material(
                               // elevation: 2.0,
                               //borderRadius: BorderRadius.circular(5.0),F2F8F8
                               color: index % 2 == 0
                                   ? Theme.of(context).primaryColorLight
                                   : Colors.white,
                               child: CardContentTitle(
-                                state.response.ebody?.current[index]?.nameAr ??
+                                state.response.ebody?.expectaions[index]?.nameAr ??
                                     '',
-                                numberFormat.format(double.parse(state.response
-                                            .ebody?.current[index]?.buyingPrice ??
+                                numberFormat.format(double.parse(state
+                                            .response
+                                            .ebody
+                                            ?.expectaions[index]
+                                            ?.buyingPrice ??
                                         '0')) ??
                                     '-',
                                 numberFormat.format(double.parse(state
                                             .response
                                             .ebody
-                                            ?.current[index]
+                                            ?.expectaions[index]
                                             ?.sellingPrice ??
                                         '0')) ??
                                     '-',
                                 Theme.of(context).textTheme.subtitle1,
-                                networkUrl:
-                                    state.response.ebody?.current[index].image ??
-                                        '',
-                              )),
-                        ),
-                      ),
-                      SizedBox(height: 124.sp),
-                      Divider(
-                        color: Theme.of(context).primaryColor,
-                        thickness: 1,
-                      ),
-                      CardContentTitle(
-                          ' USA دولار أمريكي',
-                          'شراء',
-                          'بيع',
-                          Theme.of(context).textTheme.headline2),
-                      Divider(
-                        color: Theme.of(context).primaryColor,
-                        thickness: 1,
-                      ),
-                      ListView.builder(
-                        itemExtent: 42.0,
-                        itemCount: state.response.ebody.expectaions.length,
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) => Container(
-                          //padding: EdgeInsets.all(2.0),
-                          child: Material(
-                            // elevation: 2.0,
-                            //borderRadius: BorderRadius.circular(5.0),F2F8F8
-                            color: index % 2 == 0
-                                ? Theme.of(context).primaryColorLight
-                                : Colors.white,
-                            child: CardContentTitle(
-                              state.response.ebody?.expectaions[index]?.nameAr ??
-                                  '',
-                              numberFormat.format(double.parse(state
-                                          .response
-                                          .ebody
-                                          ?.expectaions[index]
-                                          ?.buyingPrice ??
-                                      '0')) ??
-                                  '-',
-                              numberFormat.format(double.parse(state
-                                          .response
-                                          .ebody
-                                          ?.expectaions[index]
-                                          ?.sellingPrice ??
-                                      '0')) ??
-                                  '-',
-                              Theme.of(context).textTheme.subtitle1,
-                              networkUrl: state
-                                      .response.ebody?.expectaions[index].image ??
-                                  '',
+                                networkUrl: state
+                                        .response.ebody?.expectaions[index].image ??
+                                    '',
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: 124.sp),
-                    ],
-                  );
-                } else if (state is FailedMarketPricesState) {
-                  return TextTitle('', Theme.of(context).textTheme.subtitle1);
-                } else {
-                  return TextTitle('', Theme.of(context).textTheme.subtitle1);
-                }
-              }),
-            ),
-          ],
+                        SizedBox(height: 124.sp),
+                      ],
+                    );
+                  } else if (state is FailedMarketPricesState) {
+                    return TextTitle('', Theme.of(context).textTheme.subtitle1);
+                  } else {
+                    return TextTitle('', Theme.of(context).textTheme.subtitle1);
+                  }
+                }),
+              ),
+            ],
+          ),
         ),
       ),
     );

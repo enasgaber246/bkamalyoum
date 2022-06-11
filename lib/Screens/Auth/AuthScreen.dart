@@ -1,3 +1,4 @@
+import 'package:bkamalyoum/Screens/Menu/MenuBloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,6 +7,11 @@ import 'SignInSreen.dart';
 import 'SignUpScreen.dart';
 
 class AuthScreen extends StatefulWidget {
+  final BuildContext homeContext;
+  final MenuBloc bloc;
+
+  const AuthScreen({Key key, this.homeContext, this.bloc}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return _authScreenState();
@@ -55,8 +61,12 @@ class _authScreenState extends State<AuthScreen> {
                 ),
                 Expanded(
                   child: Container(
-                    child:
-                        TabBarView(children: [SigninScreen(), SignupScreen()]),
+                    child: TabBarView(children: [
+                      SigninScreen(
+                          homeContext: widget.homeContext, bloc: widget.bloc),
+                      SignupScreen(
+                          homeContext: widget.homeContext, bloc: widget.bloc)
+                    ]),
                   ),
                 )
               ],

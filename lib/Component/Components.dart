@@ -65,7 +65,9 @@ showMsg(BuildContext mContext, String msg) {
           fontWeight: FontWeight.w500,
           horizontal: 50.0,
           verticalMargin: 0,
-          onPressed: () async {},
+          onPressed: () async {
+            Navigator.pop(mContext);
+          },
         ),
         color: Theme.of(mContext).primaryColor,
         onPressed: () => Navigator.pop(mContext),

@@ -21,32 +21,21 @@ class Splash extends StatefulWidget {
 }
 
 class _splashState extends State<Splash> with TickerProviderStateMixin {
-  FirebaseMessaging _messaging;
   AnimationController motionController;
   Animation motionAnimation;
   double size = 20;
 
   @override
   void initState() {
-    registerNotification();
-    checkForInitialMessage();
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print('FirebaseMessaging : OpenedApp');
-
-      PushNotification notification = PushNotification(
-        title: message.notification?.title,
-        body: message.notification?.body,
-      );
-    });
-
     super.initState();
 
-    Future.delayed(Duration(seconds: 3), () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => HomePage()),
-      );
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => HomePage()),
+          (Route<dynamic> route) => false);
+
+      // Navigator.push(
+      //     context, MaterialPageRoute(builder: (context) => HomePage()));
     });
 
     motionController = AnimationController(
@@ -102,34 +91,33 @@ class _splashState extends State<Splash> with TickerProviderStateMixin {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-             Container(
-                    child: Stack(children: <Widget>[
-                      Center(
-                          child: Container(
-                        height: size,
-                        width: 575.01.sp,
-                        child: SvgPicture.asset(
-                          imgUrlLogo,
-                        ),
-                      )),
-                    ]),
-                    height: 200,
-                  ),
+                Container(
+                  child: Stack(children: <Widget>[
+                    Center(
+                        child: Container(
+                      height: size,
+                      width: 575.01.sp,
+                      child: SvgPicture.asset(
+                        imgUrlLogo,
+                      ),
+                    )),
+                  ]),
+                  height: 200,
+                ),
 
                 Container(
                   child: Stack(children: <Widget>[
                     Center(
                         child: Container(
-                          height: size,
-                          //width: 575.01.sp,
-                          child: TextTitle(
-                            'بكام اليوم؟',
-                            Theme.of(context).textTheme.headline1,
-                            textAlign: TextAlign.center,
-                            horizontal: 0.0,
-                            vertical: 0.0,
-                          )
-                        )),
+                            height: size,
+                            //width: 575.01.sp,
+                            child: TextTitle(
+                              'بكام اليوم؟',
+                              Theme.of(context).textTheme.headline1,
+                              textAlign: TextAlign.center,
+                              horizontal: 0.0,
+                              vertical: 0.0,
+                            ))),
                   ]),
                   height: 200,
                 ),
@@ -159,134 +147,5 @@ class _splashState extends State<Splash> with TickerProviderStateMixin {
                     )),
               ],
             )));
-  }
-
-  void registerNotification() async {
-    // 1. Initialize the Firebase app
-    await Firebase.initializeApp();
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    // 2. Instantiate Firebase Messaging
-    _messaging = FirebaseMessaging.instance;
-    String token = await _messaging.getToken();
-    prefs.setString('FCM_DEVICE_TOKEN', token);
-
-    _messaging.onTokenRefresh.listen((newToken) async {
-      prefs.setString('FCM_DEVICE_TOKEN', token);
-    });
-
-    print('FirebaseMessaging : Token ${token}');
-
-    await FirebaseMessaging.instance.setAutoInitEnabled(true);
-
-    // 3. On iOS, this helps to take the user permissions
-    NotificationSettings settings = await _messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
-
-      // For handling the received notifications
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        print('FirebaseMessaging : OnMessage');
-
-        // _showNotification();
-
-        showSimpleNotification(
-          Row(
-            children: [
-              Center(
-                child: Container(
-                  height: 148.sp,
-                  width: 148.sp,
-                  child: SvgPicture.asset(
-                    'assets/images/logo.svg',
-                  ),
-                ),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  TextTitle(
-                    message.notification?.title ?? '-',
-                    Theme.of(context).textTheme.headline2,
-                    textAlign: TextAlign.center,
-                  ),
-                  TextTitle(
-                    message.notification?.body ?? '-',
-                    Theme.of(context).textTheme.headline3,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            ],
-          ),
-          background: Theme.of(context).primaryColorLight,
-          duration: Duration(seconds: 30),
-        );
-
-        // Parse the message received
-        PushNotification notification = PushNotification(
-          title: message.notification?.title,
-          body: message.notification?.body,
-        );
-
-        setState(() {
-          // _notificationInfo = notification;
-          // _totalNotifications++;
-        });
-      });
-      FirebaseMessaging.onBackgroundMessage(
-          _firebaseMessagingBackgroundHandler);
-    } else {
-      print('User declined or has not accepted permission');
-    }
-  }
-
-  Future<void> _showNotification() async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-            'your channel id', 'your channel name', 'your channel description',
-            importance: Importance.max,
-            priority: Priority.high,
-            showWhen: false);
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-        0, 'plain title', 'plain body', platformChannelSpecifics,
-        payload: 'item x');
-  }
-}
-
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-
-Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
-}
-
-// For handling notification when the app is in terminated state
-Future checkForInitialMessage() async {
-  await Firebase.initializeApp();
-  RemoteMessage initialMessage =
-      await FirebaseMessaging.instance.getInitialMessage();
-
-  if (initialMessage != null) {
-    PushNotification notification = PushNotification(
-      title: initialMessage.notification?.title,
-      body: initialMessage.notification?.body,
-    );
-    // setState(() {
-    //   _notificationInfo = notification;
-    //   _totalNotifications++;
-    // });
   }
 }

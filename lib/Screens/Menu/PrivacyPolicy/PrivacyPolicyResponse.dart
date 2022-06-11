@@ -3,7 +3,7 @@ class PrivacyPolicyResponse {
   PrivacyPolicyRequest({
       int ecode, 
       String emsg, 
-      List<Ebody> ebody,}){
+      List<PrivacyItem> ebody,}){
     _ecode = ecode;
     _emsg = emsg;
     _ebody = ebody;
@@ -15,17 +15,17 @@ class PrivacyPolicyResponse {
     if (json['Ebody'] != null) {
       _ebody = [];
       json['Ebody'].forEach((v) {
-        _ebody.add(Ebody.fromJson(v));
+        _ebody.add(PrivacyItem.fromJson(v));
       });
     }
   }
   int _ecode;
   String _emsg;
-  List<Ebody> _ebody;
+  List<PrivacyItem> _ebody;
 
   int get ecode => _ecode;
   String get emsg => _emsg;
-  List<Ebody> get ebody => _ebody;
+  List<PrivacyItem> get ebody => _ebody;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -39,8 +39,8 @@ class PrivacyPolicyResponse {
 
 }
 
-class Ebody {
-  Ebody({
+class PrivacyItem {
+  PrivacyItem({
       int id, 
       String name, 
       String value,}){
@@ -49,7 +49,7 @@ class Ebody {
     _value = value;
 }
 
-  Ebody.fromJson(dynamic json) {
+  PrivacyItem.fromJson(dynamic json) {
     _id = json['id'];
     _name = json['name'];
     _value = json['value'];

@@ -1,22 +1,46 @@
 import 'dart:io';
 
 import 'package:bkamalyoum/Component/AppBarCustom.dart';
+import 'package:bkamalyoum/Component/ConfirmationPopUp.dart';
 import 'package:bkamalyoum/Component/MenuCard.dart';
+import 'package:bkamalyoum/Component/TextTitle.dart';
+import 'package:bkamalyoum/Screens/Auth/AuthScreen.dart';
+import 'package:bkamalyoum/Screens/ConfirmPhoneNumber/ConfirmPhoneNumberScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:rate_my_app/rate_my_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Auth/AuthScreen.dart';
+import 'MenuBloc.dart';
 import 'News/NewsScreen.dart';
 import 'PrivacyPolicy/PrivacyPolicyScreen.dart';
 import 'Setting/SettingScreen.dart';
 import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MenuScreen extends StatelessWidget {
+  final MenuBloc bloc = MenuBloc();
+
   @override
   Widget build(BuildContext mContext) {
-    // TODO: implement build
+    return BlocProvider<MenuBloc>(
+      create: (context) => bloc..add(LoadMenuEvent()),
+      child: BlocBuilder<MenuBloc, MenuState>(builder: (context, state) {
+        if (state is LoadedMenuState) {
+          return screenContent(mContext, prefs: state.prefs);
+        } else {
+          return SizedBox();
+        }
+      }),
+    );
+  }
+
+  Widget screenContent(BuildContext mContext, {SharedPreferences prefs}) {
     return Scaffold(
       appBar: AppBarCustom(
         mContext: mContext,
@@ -24,6 +48,23 @@ class MenuScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
+          SizedBox(height: 50.sp),
+          ((prefs?.getString('accessToken') ?? '').isNotEmpty)
+              ? Container(
+                  alignment: Alignment.centerRight,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextTitle(
+                          ' ${(prefs?.getString('UserName') ?? '')} مرحبا',
+                          Theme.of(mContext).textTheme.subtitle1,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : SizedBox(),
           MenuCard('اهم الاخبار', 'assets/images/news.svg', () {
             Navigator.push(
               mContext,
@@ -44,7 +85,8 @@ class MenuScreen extends StatelessWidget {
             thickness: 1,
           ),
           MenuCard('قيم التطبيق', 'assets/images/rate_app.svg', () {
-            rateTheApp(mContext);
+            // rateTheApp(mContext);
+            openRateApp();
           }),
           Divider(
             color: Theme.of(mContext).dividerColor,
@@ -80,9 +122,57 @@ class MenuScreen extends StatelessWidget {
             color: Theme.of(mContext).dividerColor,
             thickness: 1,
           ),
+          ((prefs?.getString('accessToken') ?? '').isNotEmpty)
+              ? MenuCard('تسجيل خروج', 'assets/images/logo.svg', () {
+                  showDialog(
+                      context: mContext,
+                      builder: (BuildContext context) =>
+                          ConfirmationPopUp('تسجيل خروج', () async {
+                            SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+
+                            prefs.setString('token_type', '');
+                            prefs.setString('accessToken', '');
+                            prefs.setString('refreshToken', '');
+
+                            bloc..add(LoadMenuEvent());
+                            Navigator.pop(mContext);
+                          }));
+                })
+              : MenuCard('تسجيل دخول', 'assets/images/logo.svg', () {
+                  Navigator.push(
+                    mContext,
+                    MaterialPageRoute(
+                        builder: (context) => AuthScreen(
+                              bloc: bloc,
+                              // phone_number: '123456789',
+                            )),
+                  );
+                }),
         ],
       ),
     );
+  }
+
+  void openRateApp() {
+    if (Platform.isAndroid) {
+      openAppAndroid();
+    } else if (Platform.isIOS) {
+      openAppIOS();
+    }
+  }
+
+  void openAppIOS() {}
+
+  void openAppAndroid() {
+    String appPackageName = 'com.bkamalyoum.bkamalyoum';
+    try {
+      launch("market://details?id=" + appPackageName);
+    } on PlatformException catch (e) {
+      launch("https://play.google.com/store/apps/details?id=" + appPackageName);
+    } finally {
+      launch("https://play.google.com/store/apps/details?id=" + appPackageName);
+    }
   }
 
   Future<void> shareAppUrl(String appUrl) async {

@@ -188,26 +188,19 @@ class _BankPriceDetailsState extends State<BankPriceDetails> {
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 20.0.sp),
                     child: Switch(
-                      value: widget.prefs?.getBool('Currency' +
-                          currency_id) ??
+                      value: widget.prefs?.getBool('Currency' + currency_id) ??
                           false,
                       activeColor: Theme.of(context).primaryColor,
                       inactiveThumbColor: Colors.black12,
                       onChanged: (bool val) {
-
                         setState(() {
-                          widget.prefs.setBool(
-                              'Currency' +
-                                  currency_id,
-                              val);
+                          widget.prefs.setBool('Currency' + currency_id, val);
                         });
 
                         if (val) {
-                          fcmSubscribe('Currency' +
-                              currency_id);
+                          fcmSubscribe('Currency' + currency_id);
                         } else {
-                          fcmUnSubscribe('Currency' +
-                              currency_id);
+                          fcmUnSubscribe('Currency' + currency_id);
                         }
                       },
                     ),
@@ -322,51 +315,53 @@ class _BankPriceDetailsState extends State<BankPriceDetails> {
             (model.hotLine ?? '').isNotEmpty
                 ? Container(
                     margin: EdgeInsets.symmetric(horizontal: 24.0.sp),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: Icon(
+                    child: InkWell(
+                      onTap: (){
+                        UrlLauncher.launch("tel://${model.hotLine ?? ''}");
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Icon(
                             Icons.phone_in_talk_outlined,
                             color: Theme.of(context).primaryColor,
+                            size: 24,
                           ),
-                          iconSize: 24,
-                          onPressed: () {
-                            UrlLauncher.launch("tel://${model.hotLine ?? ''}");
-                          },
-                        ),
-                        TextTitle(model.hotLine ?? '',
-                            Theme.of(context).textTheme.subtitle1),
-                        TextTitle('  : الخط الساخن  ',
-                            Theme.of(context).textTheme.subtitle1),
-                      ],
+                          TextTitle(model.hotLine ?? '',
+                              Theme.of(context).textTheme.subtitle1),
+                          TextTitle('  : الخط الساخن  ',
+                              Theme.of(context).textTheme.subtitle1),
+                        ],
+                      ),
                     ),
                   )
                 : SizedBox(),
             SizedBox(height: 30.0.sp),
-            (model.webUrl ?? '').isNotEmpty
-                ? Container(
-                    margin: EdgeInsets.symmetric(horizontal: 24.0.sp),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Link(
-                          child: Text('تصفح الموقع الالكتروني',
-                              style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  fontSize: 50.sp,
-                                  color: Theme.of(context).primaryColor
-                                  // add add underline in text
-                                  )),
-                          url: model.webUrl ?? '',
-                          //onError: _showErrorSnackBar,
-                        ),
-                        TextTitle(':  الموقع الالكتروني ',
-                            Theme.of(context).textTheme.subtitle1),
-                      ],
-                    ),
-                  )
-                : SizedBox(),
+            if ((model.webUrl ?? '').isNotEmpty)
+              InkWell(
+                onTap: (){
+                  UrlLauncher.launch(model.webUrl ?? '');
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 24.0.sp),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text('تصفح الموقع الالكتروني',
+                          style: TextStyle(
+                              decoration: TextDecoration.underline,
+                              fontSize: 50.sp,
+                              color: Theme.of(context).primaryColor
+                              // add add underline in text
+                              )),
+                      TextTitle(':  الموقع الالكتروني ',
+                          Theme.of(context).textTheme.subtitle1),
+                    ],
+                  ),
+                ),
+              )
+            else
+              SizedBox(),
             // SizedBox(height:  30.0.sp),
             // Btn(
             //   'عرض الرسم البياني',

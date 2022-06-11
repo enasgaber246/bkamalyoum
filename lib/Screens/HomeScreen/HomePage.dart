@@ -7,11 +7,15 @@ import 'package:bkamalyoum/Component/Components.dart';
 import 'package:bkamalyoum/Component/TextTitle.dart';
 import 'package:bkamalyoum/Screens/BankPrices/BankPricesBloc.dart';
 import 'package:bkamalyoum/Screens/Menu/MenuScreen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,22 +25,21 @@ import '../GoldPrices/GoldPricesScreen.dart';
 import '../MarketPrices/MarketPricesScreen.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../Splash/PushNotification.dart';
 import 'Currency/CurrencyBloc.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
 
   @override
-  HomePageState createState() => HomePageState();
+  HomePageState createState() {
+    return HomePageState();
+  }
 }
 
 class HomePageState extends State<HomePage> {
   // final currency_bloc = CurrencyBloc();
   // final BankPricesBloc bankPricesBloc = BankPricesBloc();
-
-  // // ScreenShot
-  // Uint8List _imageFileScreenShot;
-  // File _imageFile;
 
   //Create an instance of ScreenshotController
   ScreenshotController screenshotController = ScreenshotController();
@@ -57,6 +60,8 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext mContext) {
+    initFCMNotifications();
+
     selectedItemColor = Colors.white;
     unselectedItemColor = Colors.white;
     selectedBgColor = Theme.of(context).primaryColor;
@@ -335,4 +340,144 @@ class HomePageState extends State<HomePage> {
       print('Share error: $e');
     }
   }
+
+  // FCM Notifications
+  FirebaseMessaging _messaging;
+
+  void initFCMNotifications() {
+    if (_messaging != null) {
+      return;
+    }
+    registerNotification();
+    // checkForInitialMessage();
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('FirebaseMessaging : OpenedApp');
+
+      PushNotification notification = PushNotification(
+        title: message.notification?.title,
+        body: message.notification?.body,
+      );
+    });
+  }
+
+  void registerNotification() async {
+    // 1. Initialize the Firebase app
+    await Firebase.initializeApp();
+
+    await subscribeAllChannels();
+
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true, // Required to display a heads up notification
+      badge: true,
+      sound: true,
+    );
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // 2. Instantiate Firebase Messaging
+    _messaging = FirebaseMessaging.instance;
+    String token = await _messaging.getToken();
+    prefs.setString('FCM_DEVICE_TOKEN', token);
+
+    _messaging.onTokenRefresh.listen((newToken) async {
+      prefs.setString('FCM_DEVICE_TOKEN', token);
+    });
+
+    print('FirebaseMessaging : Token ${token}');
+
+    await FirebaseMessaging.instance.setAutoInitEnabled(true);
+
+    // 3. On iOS, this helps to take the user permissions
+    NotificationSettings settings = await _messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+
+      // For handling the received notifications
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        print('FirebaseMessaging : OnMessage');
+
+        showSimpleNotification(
+          Row(
+            children: [
+              Center(
+                child: Container(
+                  height: 148.sp,
+                  width: 148.sp,
+                  child: SvgPicture.asset(
+                    'assets/images/logo.svg',
+                  ),
+                ),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  TextTitle(
+                    message.notification?.title ?? '-',
+                    Theme.of(context).textTheme.headline2,
+                    textAlign: TextAlign.center,
+                  ),
+                  TextTitle(
+                    message.notification?.body ?? '-',
+                    Theme.of(context).textTheme.headline3,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          background: Theme.of(context).primaryColorLight,
+          duration: Duration(seconds: 30),
+        );
+      });
+
+      FirebaseMessaging.onBackgroundMessage(
+          _firebaseMessagingBackgroundHandler);
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+  final FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
+
+  void fcmSubscribe(String TopicToListen) {
+    firebaseMessaging.subscribeToTopic(TopicToListen);
+  }
+
+  void fcmUnSubscribe(String TopicToListen) {
+    firebaseMessaging.unsubscribeFromTopic(TopicToListen);
+  }
+
+  Future<void> subscribeAllChannels() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    firebaseMessaging.subscribeToTopic('Public');
+    firebaseMessaging.subscribeToTopic('NotificationSound');
+
+    prefs.setBool('Public', true);
+    prefs.setBool('NotificationSound', true);
+
+    // if first time subscribe to these
+    if (prefs.getBool('NewsTopic') == null) {
+      firebaseMessaging.subscribeToTopic('NewsTopic');
+      prefs.setBool('NewsTopic', true);
+    }
+  }
+}
+
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  print("Handling a background message: ${message.messageId}");
 }

@@ -1,38 +1,95 @@
-/// token_type : "Bearer"
-/// expires_in : 31536000
-/// access_token : "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIyIiwianRpIjoiMDExYzU1MDlhMDhkZDkxZjU2Y2M5N2IzMDVjNTgxYzNlYWFhODFlMGI0YWNiZmRhNGNmMWNlYzJjNzM1MTZjYTkwMWYwMzU0OWZmZmJlODMiLCJpYXQiOjE2NTQzMTAzMDAuNzI0NjM2MDc3ODgwODU5Mzc1LCJuYmYiOjE2NTQzMTAzMDAuNzI0NjQzOTQ1NjkzOTY5NzI2NTYyNSwiZXhwIjoxNjg1ODQ2MzAwLjY3OTc2MzA3ODY4OTU3NTE5NTMxMjUsInN1YiI6IjIwIiwic2NvcGVzIjpbXX0.21-Jb38vwAjogH5hm-KRwSD8QlhEqbeqJzgAn3ZhY9YuuKkYoWDEb4XPTseZuQi586mE_FByMO3ugm6qHjFywdbKe4cSqnK6sk4UMg21jYdz9aZHje63DyGz-oL6cX0r1AE8nYZ2BsXh_CFV6RkwhC87ymjt2EFyaKMnSuYc1aqLEkPpExN4DdYLZc61PIqIzrVkFy-N6VR9EgbEvrxhjkMQ0MaN2dZ1QM5cfN0SRVDz9SUxAXDqm8-66nITFCB0cqjZaOFodCRbi1GeI2aO-nm3sdHMgXyarrY4WixfsmPw2gXIooL7X7JU_md_jyqrzQJ66ScvMJipeAxFQkK2AXIPjDbdypU9B_4hiWrTAA5BqvOH51JPOookbj1xdl9aGx6nMUdarSwu8qhjHZWh0q_AKJfDtV7pvI10kfqWuf_nWURbTG1f-0TiFEwAvH3GqLuVzM7SmDR8dqYyxcVcXV0S0l4wyUujbnzN8XjQ1c1u1xct5n_7eiyUJRbWhEAjqHQlXpOFNj1HkwqNH98oX12XhnDVRfH7AjrsDQESRCLynlLMF5_FFXpKeks8RWDWCepDw_dPph6H0xuqVGW00EmWCt7Ahkgup3Zg8bsFuL2f0y9YhyFKEOqIJYCwOPxQH-SqGWNs5CfMUMgB-C8cfPCsfD3fNLcZ-cukKqDIBv8"
-/// refresh_token : "def50200fb888f5e78176e52063688573c0873b4f618042ff8409f4a3506f31765793668657ad15f3e5525d39b85d6fc69a4b3cc51b19756d1e225075eaa220a762784e9c01e454190f574149556aeef66e6ee7e1ade9118b0ed06142ece117c5158eb5d6190ea1f5e00f6ea4d97b0039faa820dcd1b4520f4f963134bca55145bf21270daca1a60e0117b301ee08d1952b40ad69acec7b66202e0d1c2d73708042dea46fbc797b98ef044f55dcdaa2433aa2d49bf68d87c4cbb00514624d15e9d76989c41cb2f3723d1f67adbc4677819a8a779e1bf85e4d11d32a8471bba14e2ee09eac87127494c982b06bd8781b1cba863a4f614e978e4c02ca8c21477b80ef00060ba7768f893b289c204c15de21c26bf6db781392116b6203ba5469b8f3cee51e22475b47acee7363edab3075182fdd9996e197f05e87f1e4d6b0206920c04389c1fa1b40f512a368ca6e096d41d2a32d01670f732c46de936093d714e2954"
+/// Ecode : 200
+/// Emsg : "Success"
+/// Edata : {"accessToken":"eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiN2NkNWE5YTEzZWNkNjIzNDQyNTZjZDI3MDUyZTljOGVmMWYzY2U4YTkwMThjOTgyNjA4MWQ0ODYwOTI5YmZiMTFkYTBmNTdhY2ZmYjAwNTEiLCJpYXQiOjE2NTQ3NzYwMTIuNDkyNjAyMTA5OTA5MDU3NjE3MTg3NSwibmJmIjoxNjU0Nzc2MDEyLjQ5MjYwODA3MDM3MzUzNTE1NjI1LCJleHAiOjE2ODYzMTIwMTIuNDcwNzgzOTQ4ODk4MzE1NDI5Njg3NSwic3ViIjoiMzMiLCJzY29wZXMiOltdfQ.iLrBWa9BFJZmL-cXYPnnNQbsAgSiJsAGdPQfGQBMPWXsinWVk1kECkoPD5IPnPpyTZunC-n4gGBAEan_xX2QwCmcY9QQ4LlvW4GqZ-cVR7W-59vVQRg3tOWtEJ9nNAEpnT0hw1NhnrEts9x55xM3rz4xFideaYH9glrxqKfMmM-WoY4dNviSJx6zTRJZBSjv-NqHiOJt9lX_NFldiX7K_r1NDnwJFydlxVtGDl-lPwXaHIyFM-rG0cL-7mBJ8bY2-YR4umx0vVumw9g9yZFWzoriGnevtEvof3s4ag5lsCx9U2kQxzJiRUUtjt4V2DwbbxZ9sAFAV1AxYZRVmoe41IHeadtCa_bNaDuLTfMbTjRtpfCInqH_x0GMytB9EnVbhbIu9wEFRd6dFk2rUDiPicxx42mAu5Ig05HKXLy0Pnn-kbJUlozfOvYF-efdLqfbQIFwoiUIQ3MyT8JogyotaNunNSvzlf6Nf1imPqhuYityjuQ7Y7-mvnuSqrgMjX6Zk1OF-ZITbe8Q8eRZm05nf9WXTnln5sbMZTf1duYWcEyKS8AFTCcuHKWy3aRLiIrFoJqCPIvRXtbDhIhv6fqd7QbzWJvr6rCLaOM_-nkjpwQpfShYh79pSxiERD30zlR_Avy-qqlCTjjt4mfndUs2JJrhz1_YkEWRPV3-b3gSao4","user":{"id":33,"name":"Mostafa Aboelnasr","phone":"2183789122","image":null,"phone_verified_at":null}}
 
 class LoginResponse {
   LoginResponse({
-    this.tokenType,
-    this.expiresIn,
-    this.accessToken,
-    this.refreshToken,
-    this.message,
-  });
+      this.ecode, 
+      this.emsg, 
+      this.edata,});
 
   LoginResponse.fromJson(dynamic json) {
-    tokenType = json['token_type'];
-    expiresIn = json['expires_in'];
-    accessToken = json['access_token'];
-    refreshToken = json['refresh_token'];
-    message = json['message'];
+    ecode = json['Ecode'];
+    emsg = json['Emsg'];
+    edata = json['Edata'] != null ? Edata.fromJson(json['Edata']) : null;
   }
-
-  String tokenType;
-  int expiresIn;
-  String accessToken;
-  String refreshToken;
-  String message;
+  int ecode;
+  String emsg;
+  Edata edata;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['token_type'] = tokenType;
-    map['expires_in'] = expiresIn;
-    map['access_token'] = accessToken;
-    map['refresh_token'] = refreshToken;
-    map['message'] = message;
+    map['Ecode'] = ecode;
+    map['Emsg'] = emsg;
+    if (edata != null) {
+      map['Edata'] = edata.toJson();
+    }
     return map;
   }
+
+}
+
+/// accessToken : "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiN2NkNWE5YTEzZWNkNjIzNDQyNTZjZDI3MDUyZTljOGVmMWYzY2U4YTkwMThjOTgyNjA4MWQ0ODYwOTI5YmZiMTFkYTBmNTdhY2ZmYjAwNTEiLCJpYXQiOjE2NTQ3NzYwMTIuNDkyNjAyMTA5OTA5MDU3NjE3MTg3NSwibmJmIjoxNjU0Nzc2MDEyLjQ5MjYwODA3MDM3MzUzNTE1NjI1LCJleHAiOjE2ODYzMTIwMTIuNDcwNzgzOTQ4ODk4MzE1NDI5Njg3NSwic3ViIjoiMzMiLCJzY29wZXMiOltdfQ.iLrBWa9BFJZmL-cXYPnnNQbsAgSiJsAGdPQfGQBMPWXsinWVk1kECkoPD5IPnPpyTZunC-n4gGBAEan_xX2QwCmcY9QQ4LlvW4GqZ-cVR7W-59vVQRg3tOWtEJ9nNAEpnT0hw1NhnrEts9x55xM3rz4xFideaYH9glrxqKfMmM-WoY4dNviSJx6zTRJZBSjv-NqHiOJt9lX_NFldiX7K_r1NDnwJFydlxVtGDl-lPwXaHIyFM-rG0cL-7mBJ8bY2-YR4umx0vVumw9g9yZFWzoriGnevtEvof3s4ag5lsCx9U2kQxzJiRUUtjt4V2DwbbxZ9sAFAV1AxYZRVmoe41IHeadtCa_bNaDuLTfMbTjRtpfCInqH_x0GMytB9EnVbhbIu9wEFRd6dFk2rUDiPicxx42mAu5Ig05HKXLy0Pnn-kbJUlozfOvYF-efdLqfbQIFwoiUIQ3MyT8JogyotaNunNSvzlf6Nf1imPqhuYityjuQ7Y7-mvnuSqrgMjX6Zk1OF-ZITbe8Q8eRZm05nf9WXTnln5sbMZTf1duYWcEyKS8AFTCcuHKWy3aRLiIrFoJqCPIvRXtbDhIhv6fqd7QbzWJvr6rCLaOM_-nkjpwQpfShYh79pSxiERD30zlR_Avy-qqlCTjjt4mfndUs2JJrhz1_YkEWRPV3-b3gSao4"
+/// user : {"id":33,"name":"Mostafa Aboelnasr","phone":"2183789122","image":null,"phone_verified_at":null}
+
+class Edata {
+  Edata({
+      this.accessToken, 
+      this.user,});
+
+  Edata.fromJson(dynamic json) {
+    accessToken = json['accessToken'];
+    user = json['user'] != null ? User.fromJson(json['user']) : null;
+  }
+  String accessToken;
+  User user;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['accessToken'] = accessToken;
+    if (user != null) {
+      map['user'] = user.toJson();
+    }
+    return map;
+  }
+
+}
+
+/// id : 33
+/// name : "Mostafa Aboelnasr"
+/// phone : "2183789122"
+/// image : null
+/// phone_verified_at : null
+
+class User {
+  User({
+      this.id, 
+      this.name, 
+      this.phone, 
+      this.image, 
+      this.phoneVerifiedAt,});
+
+  User.fromJson(dynamic json) {
+    id = json['id'];
+    name = json['name'];
+    phone = json['phone'];
+    image = json['image'];
+    phoneVerifiedAt = json['phone_verified_at'];
+  }
+  int id;
+  String name;
+  String phone;
+  dynamic image;
+  dynamic phoneVerifiedAt;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['id'] = id;
+    map['name'] = name;
+    map['phone'] = phone;
+    map['image'] = image;
+    map['phone_verified_at'] = phoneVerifiedAt;
+    return map;
+  }
+
 }

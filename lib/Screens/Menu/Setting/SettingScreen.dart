@@ -35,7 +35,7 @@ class _settingScreenState extends State<SettingScreen> {
     // TODO: implement initState
     super.initState();
 
-    subscribeAllChannels();
+    // subscribeAllChannels();
   }
 
   @override

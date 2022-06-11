@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:bkamalyoum/Screens/BankPrices/BankPricesBloc.dart';
 import 'package:bkamalyoum/Screens/BankPrices/BankPricesScreen.dart';
 import 'package:bkamalyoum/Screens/HomeScreen/Currency/CurrencyBloc.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ChoiseCoinCard.dart';
@@ -29,9 +32,6 @@ AppBar AppBarCustom({
     ),
     automaticallyImplyLeading: false,
     actions: [
-      // _imageFileScreenShot != null
-      //     ? Image.memory(_imageFileScreenShot)
-      //     : Container(),
       (onReloadTap != null)
           ? Container(
               padding: EdgeInsets.only(right: 20.0, left: 20.0),
@@ -50,29 +50,7 @@ AppBar AppBarCustom({
           ? Container(
           padding: EdgeInsets.only(right: 12),
           child: GestureDetector(
-            onTap: () {
-              // screenshotController
-              //     .capture(pixelRatio: 1.5)
-              //     .then((Uint8List image) {
-              //   //Capture Done
-              //   setState(() {
-              //     _imageFileScreenShot = image;
-              //     _imageFile = File.fromRawPath(_imageFileScreenShot);
-              //     _shareImage(_imageFileScreenShot);
-              //   });
-              // }).catchError((onError) {
-              //   print(onError);
-              // });
-
-              // final directory = (await getApplicationDocumentsDirectory ()).path; //from path_provide package
-              // String fileName = DateTime.now().microsecondsSinceEpoch;
-              // String path = '$directory';
-              //
-              // screenshotController.captureAndSave(
-              // path //set path where screenshot will be saved
-              // fileName:fileName
-              // );
-            },
+            onTap: onTapCamera,
             child: SvgPicture.asset(
               'assets/images/camera.svg',
               width: 107.sp,

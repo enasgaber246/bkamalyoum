@@ -5,6 +5,7 @@ import 'package:bkamalyoum/Component/Btn.dart';
 import 'package:bkamalyoum/Component/Components.dart';
 import 'package:bkamalyoum/Component/TextTitle.dart';
 import 'package:bkamalyoum/Screens/ConfirmPhoneNumber/ConfirmPhoneNumberScreen.dart';
+import 'package:bkamalyoum/Screens/Menu/MenuBloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,6 +16,11 @@ import 'login_response.dart';
 import 'register_response.dart';
 
 class SignupScreen extends StatefulWidget {
+  final BuildContext homeContext;
+  final MenuBloc bloc;
+
+  const SignupScreen({Key key, this.homeContext, this.bloc}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -43,11 +49,11 @@ class _signupScreenState extends State<SignupScreen> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Container(
-                margin:
-                    EdgeInsets.symmetric(horizontal: 60.0.sp, vertical: 60.0.sp),
+                margin: EdgeInsets.symmetric(
+                    horizontal: 60.0.sp, vertical: 60.0.sp),
                 child: TextTitle(
                   'يرجي تعبئة المعلومات التالية',
-                  Theme.of(context).textTheme.headline2,
+                  Theme.of(context).textTheme.headline1,
                   textAlign: TextAlign.end,
                 )),
             AuthInputData(
@@ -118,7 +124,9 @@ class _signupScreenState extends State<SignupScreen> {
                     });
                   },
                   child: Icon(
-                    _passwordConfirmVisible ? Icons.visibility : Icons.visibility_off,
+                    _passwordConfirmVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off,
                     color: Theme.of(mContext).primaryColor,
                   ),
                 ),
@@ -134,7 +142,8 @@ class _signupScreenState extends State<SignupScreen> {
               verticalMargin: 200,
               onPressed: () async {
                 if (_formKey.currentState.validate()) {
-                  if((passwordCtrl.text ?? '') != (passwordConfirmCtrl.text ?? '')){
+                  if ((passwordCtrl.text ?? '') !=
+                      (passwordConfirmCtrl.text ?? '')) {
                     showMsg(mContext, 'رجاء تأكيد كلمة المرور');
                     return;
                   }
@@ -159,8 +168,8 @@ class _signupScreenState extends State<SignupScreen> {
     );
   }
 
-  Future<RegisterResponse> signupAPIClick(
-      BuildContext mContext, String userName, String phoneNumber, String password) async {
+  Future<RegisterResponse> signupAPIClick(BuildContext mContext,
+      String userName, String phoneNumber, String password) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String fcm_token = prefs.get("FCM_DEVICE_TOKEN") ?? '';
 
@@ -186,17 +195,12 @@ class _signupScreenState extends State<SignupScreen> {
       RegisterResponse response = RegisterResponse.fromJson(data);
 
       if (response.ecode == 200) {
-        // prefs.setString('token_type', response.tokenType ?? '');
-        // prefs.setString('accessToken', response.accessToken ?? '');
-        // prefs.setString('refreshToken', response.refreshToken ?? '');
-
-        // Navigator.pop(mContext);
-        // showMsg(mContext, 'تم تسجيل الحساب، رجاء تسجيل الدخول');
-
         Navigator.of(mContext).push(MaterialPageRoute(
             builder: (context) => ConfirmPhoneNumberScreen(
-              phone_number: phoneCtrl.text ?? '',
-            )));
+                  phone_number: phoneCtrl.text ?? '',
+                  homeContext: widget.homeContext,
+                  bloc: widget.bloc,
+                )));
 
         return response;
       } else {
